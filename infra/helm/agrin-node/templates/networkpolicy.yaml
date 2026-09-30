@@ -1,0 +1,89 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "agrin-node.fullname" . }}-sovereign-perimeter
+  labels:
+    app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: sovereign-security-perimeter
+    agrin.org/country: {{ .Values.node.countryIso | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+    - Egress
+
+  # ---------------------------------------------------------------------------
+  # INGRESS RULES: Only cluster ingress and internal monitoring
+  # ---------------------------------------------------------------------------
+  ingress:
+    # Allow from ingress controllers
+    - from:
+        - namespaceSelector:
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: In
+                values:
+                  {{- toYaml .Values.networkPolicy.allowIngressFromNamespaces | nindent 18 }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.service.targetPort }}
+
+    # Allow inter-pod communication within same release
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.service.targetPort }}
+
+  # ---------------------------------------------------------------------------
+  # EGRESS RULES: Zero raw data exfiltration. Strict sovereign boundary.
+  # ---------------------------------------------------------------------------
+  egress:
+    # 1. Cluster DNS Resolution (UDP/TCP 53)
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+    # 2. Local Database & Cache (PostgreSQL 5432 & Redis 6379 within namespace)
+    - to:
+        - podSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values: ["database", "redis", "minio"]
+      ports:
+        - protocol: TCP
+          port: 5432
+        - protocol: TCP
+          port: 6379
+        - protocol: TCP
+          port: 9000
+
+    # 3. Approved External Egress: Port 443 (HTTPS) only for BRICS Registry Handshake & STAC
+    {{- if .Values.networkPolicy.allowExternalHttps }}
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443
+    {{- end }}
+{{- end }}

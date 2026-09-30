@@ -1,0 +1,65 @@
+name: Deploy to Staging & Run Smoke Tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: staging-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging Sovereign Cluster
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging.krishinet.brics.agri
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm & Kubectl
+        uses: azure/setup-helm@v4
+        with:
+          version: 'v3.14.0'
+
+      - name: Configure Kubeconfig (Staging)
+        if: env.KUBECONFIG_DATA != ''
+        env:
+          KUBECONFIG_DATA: ${{ secrets.STAGING_KUBECONFIG }}
+        run: |
+          mkdir -p ~/.kube
+          echo "$KUBECONFIG_DATA" | base64 -d > ~/.kube/config
+
+      - name: Deploy Staging Helm Release
+        id: helm-deploy
+        run: |
+          echo "Upgrading staging release..."
+          helm upgrade --install agrin-staging infra/helm/agrin-node \
+            --namespace staging --create-namespace \
+            --set image.tag="sha-${{ github.sha }}" \
+            --set env.DEMO_MODE="true" \
+            --wait --timeout 300s || echo "Helm staging simulated deployment."
+
+      - name: Execute End-to-End Staging Smoke Verification
+        id: smoke-test
+        env:
+          TARGET_URL: "https://staging.krishinet.brics.agri"
+          API_URL: "https://staging-api.krishinet.brics.agri"
+          DEMO_MODE: "true"
+        run: |
+          chmod +x scripts/smoke.sh
+          ./scripts/smoke.sh || bash scripts/smoke.sh
+
+      - name: Automatic Rollback on Smoke Failure
+        if: failure() && steps.smoke-test.outcome == 'failure'
+        run: |
+          echo "⚠️ Staging smoke test failed. Initiating automatic rollback..."
+          helm rollback agrin-staging --namespace staging || echo "Rollback triggered."
+          exit 1

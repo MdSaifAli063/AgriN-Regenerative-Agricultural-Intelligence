@@ -1,0 +1,209 @@
+# ==============================================================================
+# Sovereign AgriN Node Helm Chart Values
+# Single source of truth for national deployments across BRICS nations.
+# ==============================================================================
+
+global:
+  environment: staging # dev, staging, prod
+  countryIso: IND      # IND, BRA, ZAF, RUS, CHN, ETH, EGY, ARE, IRN
+  demoMode: true
+  devAuthBypass: false
+
+# ------------------------------------------------------------------------------
+# 1. Sovereign Node Identity & Perimeter
+# ------------------------------------------------------------------------------
+node:
+  id: "node-ind-icar-01"
+  name: "India (ICAR / KrishiNet Sovereign Node)"
+  countryIso: "IND"
+  registryUrl: "https://registry.commons.krishinet.org"
+  messagingProvider: "simulator" # simulator, twilio, meta, africastalking
+  retentionDays: 30
+
+egressGate:
+  strictMode: true
+  minKAnonymity: 5
+  maxCoordinateDecimals: 2
+  laplaceDpEpsilon: 1.0
+
+# ------------------------------------------------------------------------------
+# 2. Backend API Service
+# ------------------------------------------------------------------------------
+api:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/krishinet/agrin-api
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 10001
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
+
+# ------------------------------------------------------------------------------
+# 3. Celery Background Worker
+# ------------------------------------------------------------------------------
+worker:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/krishinet/agrin-api
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  concurrency: 4
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 8
+    targetCPUUtilizationPercentage: 80
+
+# ------------------------------------------------------------------------------
+# 4. Celery Beat Periodic Scheduler
+# ------------------------------------------------------------------------------
+beat:
+  replicaCount: 1 # Exactly one scheduler to prevent duplicate cron dispatches
+  image:
+    repository: ghcr.io/krishinet/agrin-api
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# ------------------------------------------------------------------------------
+# 5. Dedicated Inbound Messaging Webhook Deployment (Fast Scale)
+# ------------------------------------------------------------------------------
+webhooks:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: ghcr.io/krishinet/agrin-api
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 150m
+      memory: 256Mi
+
+# ------------------------------------------------------------------------------
+# 6. Web Application & PWA Frontend
+# ------------------------------------------------------------------------------
+web:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/krishinet/agrin-web
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
+  service:
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 75
+
+# ------------------------------------------------------------------------------
+# 7. Ingress Controller (Nginx + Cert-Manager)
+# ------------------------------------------------------------------------------
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "25m"
+    nginx.ingress.kubernetes.io/limit-rps: "50"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, PATCH, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization"
+  hosts:
+    - host: node.krishinet.brics.agri
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: api
+        - path: /
+          pathType: Prefix
+          service: web
+  tls:
+    - secretName: agrin-node-tls
+      hosts:
+        - node.krishinet.brics.agri
+
+# ------------------------------------------------------------------------------
+# 8. PodDisruptionBudget & High Availability
+# ------------------------------------------------------------------------------
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# ------------------------------------------------------------------------------
+# 9. Sovereign NetworkPolicy (Perimeter Lockdown)
+# ------------------------------------------------------------------------------
+networkPolicy:
+  enabled: true
+  allowIngressFromNamespaces:
+    - ingress-nginx
+    - monitoring
+    - kube-system
+  egress:
+    allowDns: true
+    allowInternalPostgres: true
+    allowInternalRedis: true
+    allowInternalMinio: true
+    allowExternalHttps: true
+    approvedExternalHosts:
+      - registry.commons.krishinet.org
+      - generativelanguage.googleapis.com
+      - api.twilio.com
+      - graph.facebook.com
+      - api.africastalking.com
+      - api.open-meteo.com
+      - rest.isric.org
+      - power.larc.nasa.gov
+      - earth-search.aws.element84.com

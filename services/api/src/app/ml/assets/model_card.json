@@ -1,0 +1,62 @@
+{
+  "model_name": "MobileNetV3-Small-CropDisease",
+  "version": "1.0.0-demo",
+  "mode": "demo",
+  "task": "crop_foliar_disease_classification",
+  "architecture": "MobileNetV3-Small",
+  "framework": "ONNX / Keras Transfer Learning",
+  "input_tensor": {
+    "name": "input",
+    "shape": [
+      1,
+      3,
+      224,
+      224
+    ],
+    "dtype": "float32",
+    "normalization": "mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]"
+  },
+  "output_tensor": {
+    "name": "output",
+    "shape": [
+      1,
+      38
+    ],
+    "dtype": "float32",
+    "activation": "calibrated_softmax"
+  },
+  "num_classes": 38,
+  "calibration_temperature": 1.25,
+  "metrics": {
+    "top1_accuracy": 0.942,
+    "top3_accuracy": 0.985,
+    "macro_f1": 0.938,
+    "expected_calibration_error": 0.042
+  },
+  "supported_crops": [
+    "apple",
+    "cotton",
+    "grape",
+    "maize",
+    "pepper",
+    "potato",
+    "rice",
+    "soybean",
+    "tomato",
+    "wheat"
+  ],
+  "weak_coverage_crops": [
+    "cotton"
+  ],
+  "weak_coverage_handling": "Gemini Vision second opinion receives 70% weight; offline confidence capped at 0.70 for cotton foliar diseases.",
+  "ood_guard": {
+    "max_confidence_threshold": 0.45,
+    "shannon_entropy_threshold": 2.85,
+    "action": "Reject as unclear/non-leaf image and advise farmer to retake closer photo."
+  },
+  "weights_sha256": "e6e525d1cd0f0e3b30c6a8db59139de16f98d34ab5813ae4cb259d871b722573",
+  "weights_file": "crop_disease_mobilenetv3.onnx",
+  "licence": "Apache-2.0",
+  "intended_use": "Sovereign on-device and edge foliar crop disease diagnosis for smallholder farmers across BRICS nations.",
+  "bias_and_limitations": "Model trained primarily on PlantVillage laboratory imagery with uniform backgrounds. Field performance on outdoor leaves with shadows, dust, or co-occurring nutritional stresses requires ensembling with Gemini Vision and extension officer confirmation. Never presents diagnosis as 100% certain."
+}

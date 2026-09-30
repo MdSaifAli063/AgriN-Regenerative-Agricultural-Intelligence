@@ -1,0 +1,135 @@
+<USER_REQUEST>
+You are a principal full-stack engineer, AI/ML architect, and agri-tech product designer. You are helping me win a hackathon ("Build with AI") under:
+
+TRACK 4 — AgriN & Regenerative Agricultural Intelligence | BRICS Theme: Cooperation
+
+PROBLEM: Small and marginal farmers across emerging economies lack access to data-driven agricultural guidance. Relying on traditional methods instead of satellite data, soil health analytics, and climate forecasting leads to crop failure and threatens food security. The absence of shared digital infrastructure also blocks cross-border collaboration on climate-resilient farming.
+
+CHALLENGE: Build an interoperable digital agriculture network, inspired by the BRICS AgriN initiative, that delivers real-time, localised agro-advisories using AI. It must offer regenerative crop recommendations based on satellite data, soil health, and weather forecasting, plus a diagnostic tool for crop diseases, and be designed as a scalable digital public good enabling BRICS nations to share agricultural data models and strengthen cooperation on sustainable food production.
+
+=====================================================
+PRODUCT NAME: "KrishiNet-BRICS" (AgriN Commons)
+Tagline: "One field. Many nations. Shared intelligence."
+=====================================================
+
+## 1. CORE FEATURES (all must be implemented)
+
+A. FARM ONBOARDING
+- Farmer drops a pin or draws a field polygon on a map (MapLibre), or uses GPS.
+- Captures: crop history, land size, irrigation type, language, country.
+- Works in under 60 seconds with minimal typing.
+
+B. REAL-TIME FIELD INTELLIGENCE
+- Satellite: fetch Sentinel-2 imagery via the Copernicus/Earth Search STAC API, compute NDVI, NDWI and EVI for the polygon, and show a 90-day trend chart plus a colour-coded health heatmap.
+- Soil: pull ISRIC SoilGrids (pH, organic carbon, nitrogen, clay/sand/silt, CEC) and produce a Soil Health Score (0-100) with plain-language interpretation.
+- Weather: Open-Meteo 7-day forecast + NASA POWER historical climate; compute rainfall anomaly, heat-stress days, frost risk, and drought index.
+
+C. AI REGENERATIVE ADVISORY ENGINE
+- Inputs: satellite indices, soil data, weather forecast, crop, and region.
+- Outputs (structured JSON + human-readable):
+  1. Top 3 crop recommendations with suitability score, expected yield range, water need, and climate-risk rating.
+  2. Regenerative practices: cover cropping, intercropping, crop rotation, no-till/reduced tillage, composting, biochar, mulching, agroforestry, integrated pest management, and water harvesting, each with a reason, cost level (low/med/high), and estimated carbon or soil benefit.
+  3. Sowing window, irrigation schedule, fertiliser plan (organic first), and a 30-day action calendar.
+  4. Explainability: "Why this advice?" citing which data signals drove it.
+- Use Gemini API with RAG (pgvector) over a knowledge base of open agronomy guidance (FAO, ICAR, EMBRAPA, CAAS-style public docs; seed with sample docs). Force JSON schema output and add a hallucination guard: if confidence < threshold, respond "consult a local extension officer".
+
+D. CROP DISEASE DIAGNOSTIC
+- Farmer uploads or captures a leaf/crop photo.
+- Pipeline: (1) on-device/edge TFLite or ONNX MobileNetV3 classifier (PlantVillage/PlantDoc classes) for offline use; (2) Gemini multimodal vision as second opinion; (3) ensemble the two and show the top 3 predictions with confidence.
+- Output: disease name, severity, cause, organic treatment first, chemical as last resort with safe-dosage warning, prevention steps, and a "spread risk" estimate from weather (humidity/temperature).
+- Log anonymised detections geo-tagged to power a disease outbreak heatmap across regions and countries.
+
+E. VOICE + MULTILINGUAL + LOW-CONNECTIVITY
+- UI and advisories in English, Hindi, Portuguese, Russian, Mandarin, Arabic, Amharic, Persian and Swahili (i18n with next-intl, LLM translation fallback).
+- Voice input (Whisper / Web Speech API) and text-to-speech output.
+- Offline-first PWA: cache last advisory, queue photo uploads and sync later.
+- WhatsApp/SMS bot flow (Twilio webhook) for feature-phone farmers: send location + crop, receive advisory in the local language.
+
+F. BRICS INTEROPERABILITY LAYER (the "digital public good" core, our differentiator)
+- Federated architecture: each country runs its own "AgriN Node" (Docker) that keeps data sovereignty. A central "BRICS Commons Registry" only stores metadata, model cards and aggregated stats.
+- Open standards: OGC STAC for satellite catalogues, JSON-LD with FAO AGROVOC vocabulary for crop/disease terms, OpenAPI 3.1 for every API, and GeoJSON for fields.
+- Data-sharing: consent-based, anonymised, differential-privacy-style aggregation. Farmers control what is shared.
+- Model exchange: a Model Hub where countries publish/download disease and yield models with model cards (dataset, region, accuracy, licence). Implement federated learning simulation with the Flower framework (3 simulated country nodes: India, Brazil, South Africa) showing that a shared model improves accuracy without moving raw data.
+- Cross-border insights dashboard: "Climate-analogue matching", e.g. "Your district in Maharashtra resembles Mato Grosso, Brazil; here's what worked there."
+- Auth: Keycloak/OAuth2 (OIDC) with roles: Farmer, Extension Officer, Government Admin, Researcher.
+- Everything open-source under Apache-2.0 / CC-BY data licence, documented as a Digital Public Good (DPG Standard checklist).
+
+G. DASHBOARDS
+- Farmer view: simple, big icons, traffic-light health status, one "What should I do today?" card.
+- Extension officer view: village/district map of risk and disease outbreaks, and a bulk-advisory broadcast tool.
+- Policy-maker/BRICS view: cross-country food-security indicators, adoption stats, carbon/regeneration impact, outbreak alerts, and a model-sharing activity feed.
+
+H. IMPACT METRICS
+- Track and display: estimated yield uplift, water saved, CO2e sequestered (simple regenerative-practice factors), and farmers reached. Provide a transparent methodology note.
+
+## 2. TECH STACK (use exactly this unless you justify a better one)
+- Frontend: Next.js 15 (App Router) + TypeScript + Tailwind + shadcn/ui + MapLibre GL + Recharts + next-intl + next-pwa
+- Backend: FastAPI (Python 3.12), Pydantic v2, SQLAlchemy 2 + Alembic, Celery + Redis
+- DB: PostgreSQL 16 + PostGIS + pgvector
+- Object storage: MinIO (S3-compatible)
+- AI: Google Gemini API (google-genai SDK) for reasoning, vision, translation and embeddings; TFLite/ONNX MobileNetV3 for offline disease model; Flower for federated learning; LangGraph or a simple orchestrator for the agent pipeline
+- Geo/satellite: rasterio, pystac-client, shapely, numpy (compute NDVI etc.)
+- Auth: Keycloak (or Supabase Auth as a lighter option)
+- Messaging: Twilio WhatsApp/SMS
+- DevOps: Docker Compose (dev), GitHub Actions CI, Kubernetes manifests/Helm (prod), OpenTelemetry basic logging
+- Testing: pytest, Playwright (one E2E smoke test)
+
+## 3. HACKATHON-SAFE REQUIREMENTS
+- "Demo Mode" switch: if any external API fails or no key is present, fall back to realistic cached/mock data so the demo NEVER breaks.
+- Provide a seed script with 3 demo farms (India-Maharashtra cotton, Brazil-Mato Grosso soybean, South Africa-Free State maize) plus sample disease images.
+- Must run locally with: `docker compose up` and a `.env.example` file.
+- Keep API keys in env vars; never hardcode.
+- Responsible-AI: disclaimers, confidence display, human-in-the-loop escalation, bias note (training data limits), privacy-by-design and data-minimisation.
+
+## 4. HOW YOU MUST RESPOND (IMPORTANT)
+Work in PHASES. Finish one phase completely, then STOP and wait for me to type "NEXT". Output complete, copy-paste-ready code (no placeholders like "...rest of code"), with the file path as a heading above every code block.
+
+PHASE 1 - Architecture: system architecture diagram (Mermaid), data flow, DB schema (SQL), API endpoint list (OpenAPI summary), federated node design, folder structure, and threat model summary.
+PHASE 2 - Backend core: FastAPI project, models, auth, farm/field APIs, Docker Compose, .env.example, seed script.
+PHASE 3 - Data services: satellite (STAC+NDVI), SoilGrids, weather, Soil Health Score, all with demo-mode fallbacks.
+PHASE 4 - AI engine: Gemini prompts (system prompt + JSON schema), RAG pipeline with pgvector, advisory generator, explainability, confidence guard.
+PHASE 5 - Disease diagnostic: model training/export notebook (Colab-ready), TFLite/ONNX inference service, Gemini vision ensemble, outbreak logging.
+PHASE 6 - Frontend: Next.js pages/components (onboarding map, farmer dashboard, advisory, disease scan, officer dashboard, BRICS dashboard), i18n, PWA/offline, voice.
+PHASE 7 - Interoperability & federated learning: node registry, STAC/JSON-LD endpoints, Model Hub, Flower simulation, climate-analogue matching, consent management.
+PHASE 8 - WhatsApp/SMS bot, tests, CI/CD, Kubernetes, deployment guide.
+PHASE 9 - Winning package: README (with badges, screenshots plan, architecture image), 5-minute demo script, 2-minute pitch, 10-slide deck outline, judging-criteria mapping table (Innovation, Impact, Feasibility, Scalability, Cooperation/BRICS alignment), DPG-standard checklist, roadmap, and likely judge Q&A with answers.
+
+Start now with PHASE 1 only. Before starting, spend at most 5 lines confirming your assumptions, then deliver.## 2.5 DESIGN SYSTEM: GREEN & WHITE THEME (STRICT)
+
+Overall look: clean, airy, trustworthy, government-grade "digital public good" feel. White surfaces, green as the single brand colour, generous whitespace, rounded corners, soft shadows. No other accent hues except the semantic status colours below.
+
+COLOUR TOKENS (define as CSS variables in globals.css and map into tailwind.config.ts and shadcn/ui):
+- --background: #FFFFFF
+- --surface-soft: #F4FAF5 (section backgrounds, cards on white)
+- --border: #DCEBDD
+- --primary (brand green): #16A34A
+- --primary-dark: #166534 (headings, sidebar, hover)
+- --primary-deep: #14532D (footer, hero overlays)
+- --primary-light: #DCFCE7 (badges, chips, selected states)
+- --text: #0F2A1A (body), --text-muted: #4B6B57
+- Semantic status only: healthy = #16A34A, watch = #F59E0B, risk = #DC2626, info = #0EA5E9
+- Map/NDVI heatmap ramp: #DC2626 -> #F59E0B -> #FDE047 -> #86EFAC -> #16A34A -> #14532D
+
+TYPOGRAPHY: Inter for UI, Noto Sans as fallback for Devanagari, Arabic, Cyrillic, Amharic and CJK scripts. Base 16px, large 18-20px in farmer view. Headings in --primary-dark, semibold.
+
+COMPONENT RULES:
+- Primary buttons: solid green, white text, 12px radius, min height 48px (touch-friendly). Secondary: white with green border.
+- Cards: white, 1px --border, 16px radius, soft green-tinted shadow.
+- Navbar: white with a green bottom border and the logo on the left. Sidebar (officer/BRICS dashboards): --primary-dark with white text.
+- Farmer dashboard: a big "What should I do today?" hero card with a light-green gradient (#FFFFFF -> #DCFCE7), large icons (lucide-react), and a traffic-light status pill.
+- Charts (Recharts): green shades as the main series, amber/red only for warnings.
+- Include a subtle leaf/field-lines SVG pattern in hero sections at 5% opacity.
+- Empty states, loaders and skeletons are green-tinted. Micro-animations are subtle (Framer Motion, under 200ms).
+
+ACCESSIBILITY: All text/background pairs must meet WCAG AA contrast (white text only on #16A34A or darker). Never rely on colour alone; pair status colours with icons and text labels. Support a "high-contrast" toggle. Mobile-first (360px baseline), responsive up to desktop.
+
+DARK MODE: optional. If included, use deep green (#0B1F14) backgrounds with the same green accents, but the default and all screenshots must be the green and white light theme.
+
+DELIVERABLES FOR THE THEME: tailwind.config.ts, globals.css with tokens, a theme/README describing usage, and a reusable component kit (Button, Card, StatusPill, MetricTile, AdvisoryCard, MapLegend) built first in Phase 6 before pages.PHASE 6 - Frontend (green & white design system first): tailwind config + tokens + component kit, then Next.js pages (onboarding map, farmer dashboard, advisory, disease scan, officer dashboard, BRICS dashboard), i18n, PWA/offline, voice. Follow section 2.5 strictly.Include a UI wireframe description for each screen (farmer dashboard, disease scan, officer dashboard, BRICS dashboard) using the green and white theme.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-09-29T21:38:15+05:30.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from None to Gemini 3.8 Flash (High). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>

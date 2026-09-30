@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "agrin-node.fullname" . }}-worker
+  labels:
+    app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: worker
+    agrin.org/country: {{ .Values.node.countryIso | quote }}
+spec:
+  {{- if not .Values.worker.autoscaling.enabled }}
+  replicas: {{ .Values.worker.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: worker
+        agrin.org/country: {{ .Values.node.countryIso | quote }}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: worker
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+          image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+          command:
+            - celery
+            - -A
+            - app.workers.celery_app
+            - worker
+            - -c
+            - "{{ .Values.worker.concurrency }}"
+            - -l
+            - INFO
+          env:
+            - name: NODE_ID
+              value: {{ .Values.node.id | quote }}
+            - name: LOCAL_NODE_COUNTRY_ISO
+              value: {{ .Values.node.countryIso | quote }}
+            - name: DEMO_MODE
+              value: {{ .Values.global.demoMode | quote }}
+            - name: DEFAULT_MESSAGING_PROVIDER
+              value: {{ .Values.node.messagingProvider | quote }}
+            - name: MESSAGING_RETENTION_DAYS
+              value: {{ .Values.node.retentionDays | quote }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: cache
+              mountPath: /.cache
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}

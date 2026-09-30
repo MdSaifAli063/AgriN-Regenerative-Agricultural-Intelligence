@@ -1,0 +1,128 @@
+# ==============================================================================
+# Sovereign Node Dual-Tier Redis Architecture
+# 1. Redis Cache & Session Store: In-memory only, volatile-lru eviction, persistence OFF
+# 2. Redis Celery Task Queue: AOF persistence ON, fsync everysec, zero message loss
+# ==============================================================================
+
+# --- Tier 1: Cache & Sessions (Persistence OFF) ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-cache
+  namespace: agrin-node
+  labels:
+    app.kubernetes.io/name: redis-cache
+    app.kubernetes.io/component: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis-cache
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redis-cache
+        app.kubernetes.io/component: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7.2-alpine
+          command:
+            - redis-server
+            - --save
+            - ""               # Persistence disabled for cache
+            - --appendonly
+            - "no"
+            - --maxmemory
+            - "1024mb"
+            - --maxmemory-policy
+            - "allkeys-lru"
+          ports:
+            - containerPort: 6379
+              name: redis
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 1200Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-cache
+  namespace: agrin-node
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app.kubernetes.io/name: redis-cache
+---
+
+# --- Tier 2: Celery Broker & Result Backend (Persistence ON) ---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-queue
+  namespace: agrin-node
+  labels:
+    app.kubernetes.io/name: redis-queue
+    app.kubernetes.io/component: redis
+spec:
+  serviceName: redis-queue
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis-queue
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redis-queue
+        app.kubernetes.io/component: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7.2-alpine
+          command:
+            - redis-server
+            - --appendonly
+            - "yes"          # AOF persistence enabled for tasks
+            - --appendfsync
+            - "everysec"
+            - --dir
+            - "/data"
+          ports:
+            - containerPort: 6379
+              name: redis
+          volumeMounts:
+            - name: redis-queue-data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-queue-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-queue
+  namespace: agrin-node
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app.kubernetes.io/name: redis-queue

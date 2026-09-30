@@ -1,0 +1,18 @@
+apiVersion: v2
+name: agrin-platform
+description: Umbrella Helm Chart for KrishiNet-BRICS All-in-One Platform Demo
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - agriculture
+  - brics
+  - digital-public-goods
+  - sovereign-cloud
+dependencies:
+  - name: agrin-node
+    version: "1.0.0"
+    repository: "file://../agrin-node"
+  - name: brics-registry
+    version: "1.0.0"
+    repository: "file://../brics-registry"

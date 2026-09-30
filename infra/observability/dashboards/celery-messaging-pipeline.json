@@ -1,0 +1,92 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "id": null,
+  "panels": [
+    {
+      "title": "Celery Task Queue Depth",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "celery_queue_length{queue=\"default\"}",
+          "legendFormat": "Default Queue"
+        },
+        {
+          "expr": "celery_queue_length{queue=\"broadcasts\"}",
+          "legendFormat": "Broadcasts Queue"
+        }
+      ]
+    },
+    {
+      "title": "Messaging Delivery Success vs Failures",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(rate(krishinet_messages_dispatched_total{status=\"delivered\"}[5m]))",
+          "legendFormat": "Delivered"
+        },
+        {
+          "expr": "sum(rate(krishinet_messages_dispatched_total{status=\"failed\"}[5m]))",
+          "legendFormat": "Failed"
+        }
+      ]
+    },
+    {
+      "title": "Gemini API Latency & Token Spend",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "rate(krishinet_gemini_tokens_total[1h])",
+          "legendFormat": "Tokens / Hour"
+        },
+        {
+          "expr": "krishinet_gemini_request_duration_seconds",
+          "legendFormat": "Gemini Latency (s)"
+        }
+      ]
+    },
+    {
+      "title": "Provider Mode Ratio (Live vs Cache vs Demo)",
+      "type": "piechart",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum(krishinet_advisory_mode_total) by (mode)",
+          "legendFormat": "{{mode}}"
+        }
+      ]
+    },
+    {
+      "title": "Daily Outbound Messaging Spend ($ USD)",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "expr": "sum(krishinet_messaging_cost_usd_today)",
+          "legendFormat": "Cost Today"
+        }
+      ]
+    },
+    {
+      "title": "Budget Utilization %",
+      "type": "gauge",
+      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 16 },
+      "targets": [
+        {
+          "expr": "(sum(krishinet_messaging_cost_usd_today) / 50.0) * 100",
+          "legendFormat": "% of Daily Limit"
+        }
+      ]
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["krishinet", "messaging", "celery", "gemini"],
+  "time": { "from": "now-6h", "to": "now" },
+  "title": "KrishiNet-BRICS — Messaging Gateway & Worker Pipeline",
+  "uid": "celery-messaging-pipeline"
+}

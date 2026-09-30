@@ -1,0 +1,12 @@
+[bandit]
+exclude_dirs = [
+    "/tests",
+    "/.venv",
+    "/alembic",
+    "/data",
+    "/scripts",
+]
+skips = [
+    "B101", # assert used (common in validation/type narrows)
+    "B104", # bind to all interfaces 0.0.0.0 (required in container runtimes)
+]

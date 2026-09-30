@@ -1,0 +1,40 @@
+# Values override for Local / Development Clusters (e.g. Minikube / K3s)
+global:
+  environment: dev
+  demoMode: true
+  devAuthBypass: true
+
+api:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  autoscaling:
+    enabled: false
+
+worker:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  autoscaling:
+    enabled: false
+
+beat:
+  replicaCount: 1
+
+webhooks:
+  enabled: false # Use API pods directly in dev
+
+web:
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+
+ingress:
+  enabled: false
+
+networkPolicy:
+  enabled: false # Relaxed for dev debugging

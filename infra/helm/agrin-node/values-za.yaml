@@ -1,0 +1,25 @@
+# South Africa Sovereign Node Values (ARC)
+global:
+  countryIso: ZAF
+
+node:
+  id: "node-zaf-arc-01"
+  name: "South Africa (ARC Sovereign Node)"
+  countryIso: "ZAF"
+  messagingProvider: "africastalking" # Africa's Talking low-cost SMS
+  retentionDays: 30
+
+ingress:
+  hosts:
+    - host: za.krishinet.brics.agri
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: api
+        - path: /
+          pathType: Prefix
+          service: web
+  tls:
+    - secretName: za-krishinet-tls
+      hosts:
+        - za.krishinet.brics.agri

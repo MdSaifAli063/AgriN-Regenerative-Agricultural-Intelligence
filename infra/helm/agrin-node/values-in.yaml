@@ -1,0 +1,25 @@
+# India Sovereign Node Values (ICAR / KrishiNet)
+global:
+  countryIso: IND
+
+node:
+  id: "node-ind-icar-01"
+  name: "India (ICAR / KrishiNet Sovereign Node)"
+  countryIso: "IND"
+  messagingProvider: "twilio" # Twilio WhatsApp + SMS for India
+  retentionDays: 30
+
+ingress:
+  hosts:
+    - host: in.krishinet.brics.agri
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: api
+        - path: /
+          pathType: Prefix
+          service: web
+  tls:
+    - secretName: in-krishinet-tls
+      hosts:
+        - in.krishinet.brics.agri

@@ -1,0 +1,97 @@
+# ==============================================================================
+# Sovereign Node Automated Database Backup CronJob
+# Runs nightly at 01:00 UTC: Dumps PostgreSQL, encrypts with AES-256, and pushes to MinIO/S3.
+# ==============================================================================
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: agrin-postgres-backup
+  namespace: agrin-node
+  labels:
+    app.kubernetes.io/name: postgres-backup
+    app.kubernetes.io/component: disaster-recovery
+spec:
+  schedule: "0 1 * * *" # Daily at 01:00 UTC
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/component: backup-job
+        spec:
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+          containers:
+            - name: pg-backup
+              image: postgres:16-alpine
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -euo pipefail
+                  TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+                  BACKUP_FILE="/tmp/krishinet_backup_${TIMESTAMP}.sql.gz"
+                  ENCRYPTED_FILE="${BACKUP_FILE}.enc"
+
+                  echo "📦 Starting pg_dump for database ${PGDATABASE}..."
+                  pg_dump -h "${PGHOST}" -U "${PGUSER}" "${PGDATABASE}" | gzip > "${BACKUP_FILE}"
+
+                  echo "🔒 Encrypting backup file with AES-256-CBC..."
+                  openssl enc -aes-256-cbc -salt -pbkdf2 -in "${BACKUP_FILE}" -out "${ENCRYPTED_FILE}" -pass env:BACKUP_PASSPHRASE
+
+                  echo "☁️ Uploading encrypted snapshot to MinIO S3..."
+                  apk add --no-cache aws-cli
+                  aws --endpoint-url "${S3_ENDPOINT}" s3 cp "${ENCRYPTED_FILE}" "s3://${S3_BUCKET}/postgres/${TIMESTAMP}.sql.gz.enc"
+
+                  echo "✅ Backup successfully archived."
+              env:
+                - name: PGHOST
+                  value: "agrin-postgres-cluster-rw"
+                - name: PGDATABASE
+                  value: "krishinet_db"
+                - name: PGUSER
+                  value: "krishinet_admin"
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: agrin-postgres-superuser-secret
+                      key: password
+                - name: BACKUP_PASSPHRASE
+                  valueFrom:
+                    secretKeyRef:
+                      name: agrin-app-credentials
+                      key: JWT_SECRET_KEY
+                - name: S3_ENDPOINT
+                  value: "http://minio:9000"
+                - name: S3_BUCKET
+                  value: "krishinet-backups"
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: rootUser
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: rootPassword
+              resources:
+                requests:
+                  cpu: 250m
+                  memory: 512Mi
+                limits:
+                  cpu: 1000m
+                  memory: 2Gi
+              volumeMounts:
+                - name: tmp-storage
+                  mountPath: /tmp
+          volumes:
+            - name: tmp-storage
+              emptyDir:
+                sizeLimit: 10Gi

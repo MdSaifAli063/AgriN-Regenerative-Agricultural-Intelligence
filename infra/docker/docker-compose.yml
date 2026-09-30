@@ -1,0 +1,230 @@
+name: krishinet-brics
+
+services:
+  # ---------------------------------------------------------------------------
+  # 1. PostGIS 16 + pgvector Sovereign Geospatial & Embedding Database
+  # ---------------------------------------------------------------------------
+  db:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    container_name: krishinet_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-krishi_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-KrishiNetBrics2026!}
+      POSTGRES_DB: ${POSTGRES_DB:-krishinet_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-krishi_admin} -d ${POSTGRES_DB:-krishinet_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - krishinet_net
+
+  # ---------------------------------------------------------------------------
+  # 2. Redis 7 - Telemetry Cache, Rate Limiting & Celery Message Broker
+  # ---------------------------------------------------------------------------
+  redis:
+    image: redis:7.2-alpine
+    container_name: krishinet_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - krishinet_net
+
+  # ---------------------------------------------------------------------------
+  # 3. MinIO S3-Compatible Storage (Leaf Photos, Heatmaps, Model Weights)
+  # ---------------------------------------------------------------------------
+  minio:
+    image: minio/minio:RELEASE.2024-01-31T20-20-33Z
+    container_name: krishinet_minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio_admin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-KrishiMinio2026!}
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - krishinet_net
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: krishinet_minio_init
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - krishinet_net
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 $${MINIO_ROOT_USER:-minio_admin} $${MINIO_ROOT_PASSWORD:-KrishiMinio2026!};
+      /usr/bin/mc mb --ignore-existing myminio/${MINIO_BUCKET_NAME:-krishinet-media};
+      /usr/bin/mc mb --ignore-existing myminio/krishinet-models;
+      /usr/bin/mc anonymous set download myminio/${MINIO_BUCKET_NAME:-krishinet-media};
+      echo 'MinIO buckets initialized successfully.';
+      exit 0;
+      "
+
+  # ---------------------------------------------------------------------------
+  # 4. Keycloak 24 IAM & Sovereign Identity Provider (OAuth2 / OIDC)
+  # ---------------------------------------------------------------------------
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: krishinet_keycloak
+    restart: unless-stopped
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      KC_HTTP_RELATIVE_PATH: "/"
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+    ports:
+      - "${KEYCLOAK_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK' || exit 0"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - krishinet_net
+
+  # ---------------------------------------------------------------------------
+  # 5. FastAPI Core Application Service (KrishiNet-BRICS API)
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context: ../../services/api
+      dockerfile: Dockerfile
+    container_name: krishinet_api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      - APP_ENV=development
+      - DEMO_MODE=${DEMO_MODE:-true}
+      - DEV_AUTH_BYPASS=${DEV_AUTH_BYPASS:-true}
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-krishi_admin}:${POSTGRES_PASSWORD:-KrishiNetBrics2026!}@db:5432/${POSTGRES_DB:-krishinet_db}
+      - REDIS_URL=redis://redis:6379/0
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=${MINIO_ROOT_USER:-minio_admin}
+      - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD:-KrishiMinio2026!}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME:-krishinet-media}
+      - MINIO_SECURE=false
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=krishinet
+      - KEYCLOAK_CLIENT_ID=krishinet-api
+      - KEYCLOAK_CLIENT_SECRET=krishinet-client-secret-dev
+      - LOCAL_NODE_COUNTRY_ISO=${LOCAL_NODE_COUNTRY_ISO:-IND}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../../services/api/src:/app/src
+    command: >
+      sh -c "
+        echo 'Running database migrations...' &&
+        alembic upgrade head &&
+        echo 'Starting Uvicorn server...' &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - krishinet_net
+
+  # ---------------------------------------------------------------------------
+  # 6. Celery Async Task Worker (Satellite, Soil & Disease Analytics)
+  # ---------------------------------------------------------------------------
+  worker:
+    build:
+      context: ../../services/api
+      dockerfile: Dockerfile
+    container_name: krishinet_worker
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - APP_ENV=development
+      - DEMO_MODE=${DEMO_MODE:-true}
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-krishi_admin}:${POSTGRES_PASSWORD:-KrishiNetBrics2026!}@db:5432/${POSTGRES_DB:-krishinet_db}
+      - REDIS_URL=redis://redis:6379/0
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=${MINIO_ROOT_USER:-minio_admin}
+      - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD:-KrishiMinio2026!}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME:-krishinet-media}
+      - MINIO_SECURE=false
+    volumes:
+      - ../../services/api/src:/app/src
+    command: celery -A app.workers.celery_app.celery_app worker --loglevel=info -c 4
+    networks:
+      - krishinet_net
+
+  # ---------------------------------------------------------------------------
+  # 7. Celery Beat Scheduler (Periodic Outbreak Aggregations & Daily Forecasts)
+  # ---------------------------------------------------------------------------
+  beat:
+    build:
+      context: ../../services/api
+      dockerfile: Dockerfile
+    container_name: krishinet_beat
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      - APP_ENV=development
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ../../services/api/src:/app/src
+    command: celery -A app.workers.celery_app.celery_app beat --loglevel=info
+    networks:
+      - krishinet_net
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+
+networks:
+  krishinet_net:
+    driver: bridge

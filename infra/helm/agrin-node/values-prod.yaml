@@ -1,0 +1,48 @@
+# Values override for Production Sovereign Environment
+global:
+  environment: prod
+  demoMode: false
+  devAuthBypass: false
+
+api:
+  replicaCount: 4
+  autoscaling:
+    minReplicas: 4
+    maxReplicas: 20
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 4Gi
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+
+worker:
+  replicaCount: 4
+  autoscaling:
+    minReplicas: 4
+    maxReplicas: 16
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+
+webhooks:
+  enabled: true
+  replicaCount: 3
+
+web:
+  replicaCount: 3
+  autoscaling:
+    minReplicas: 3
+    maxReplicas: 12
+
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "25m"
+    nginx.ingress.kubernetes.io/limit-rps: "150"

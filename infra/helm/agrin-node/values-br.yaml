@@ -1,0 +1,25 @@
+# Brazil Sovereign Node Values (EMBRAPA)
+global:
+  countryIso: BRA
+
+node:
+  id: "node-bra-embrapa-01"
+  name: "Brazil (EMBRAPA Sovereign Node)"
+  countryIso: "BRA"
+  messagingProvider: "meta" # Meta Cloud WhatsApp API for Brazil
+  retentionDays: 30
+
+ingress:
+  hosts:
+    - host: br.krishinet.brics.agri
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: api
+        - path: /
+          pathType: Prefix
+          service: web
+  tls:
+    - secretName: br-krishinet-tls
+      hosts:
+        - br.krishinet.brics.agri

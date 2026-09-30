@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Strict Green & White Design Tokens */
+    --background: #FFFFFF;
+    --surface-soft: #F4FAF5;
+    --border: #DCEBDD;
+    
+    /* Green Brand Palette */
+    --primary: #16A34A;
+    --primary-dark: #166534;
+    --primary-deep: #14532D;
+    --primary-light: #DCFCE7;
+    
+    /* Typography Colors */
+    --text: #0F2A1A;
+    --text-muted: #4B6B57;
+    
+    /* Semantic Status Colors (Non-brand accents) */
+    --status-healthy: #16A34A;
+    --status-watch: #F59E0B;
+    --status-risk: #DC2626;
+    --status-info: #0EA5E9;
+    
+    /* Base Radius */
+    --radius-card: 16px;
+    --radius-btn: 12px;
+    
+    /* Font sizing scaling variable */
+    --font-scale: 1;
+  }
+
+  /* High Contrast Mode Toggle */
+  .high-contrast {
+    --background: #FFFFFF;
+    --surface-soft: #FFFFFF;
+    --border: #0F2A1A;
+    --primary: #14532D;
+    --primary-dark: #0A2E19;
+    --primary-deep: #051A0D;
+    --primary-light: #C2F8D5;
+    --text: #000000;
+    --text-muted: #111111;
+  }
+
+  /* Font Scale Modifiers for Accessibility */
+  .font-scale-a {
+    --font-scale: 1;
+  }
+  .font-scale-a-plus {
+    --font-scale: 1.15;
+  }
+  .font-scale-a-plus-plus {
+    --font-scale: 1.30;
+  }
+
+  /* Dark Mode (Clean Green-Dark Theme) */
+  .dark {
+    --background: #0A1C12;
+    --surface-soft: #112A1B;
+    --border: #1E4D32;
+    --primary: #22C55E;
+    --primary-dark: #16A34A;
+    --primary-deep: #15803D;
+    --primary-light: #163824;
+    --text: #F0FDF4;
+    --text-muted: #A7D5B8;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--text);
+    font-size: calc(1rem * var(--font-scale));
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Focus ring accessibility */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}
+
+/* Subtle Leaf/Field-lines SVG Pattern (5% opacity) */
+.bg-leaf-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 C20 15 15 30 15 45 C30 45 45 40 55 30 C45 20 40 10 30 5 Z M30 5 C32 25 25 40 15 45' stroke='%2316A34A' stroke-width='1.5' fill='none' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* Hero card gradient: #FFFFFF -> #DCFCE7 */
+.bg-hero-gradient {
+  background: linear-gradient(135deg, #FFFFFF 0%, #DCFCE7 100%);
+}
+
+/* Accessible touch target helper */
+.touch-target {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* RTL Helpers for Arabic & Persian locales */
+[dir="rtl"] {
+  text-align: right;
+}
+
+/* Green-tinted skeleton shimmer */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(220, 252, 231, 0.4) 0%,
+    rgba(220, 252, 231, 0.9) 50%,
+    rgba(220, 252, 231, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Respect user preferences for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

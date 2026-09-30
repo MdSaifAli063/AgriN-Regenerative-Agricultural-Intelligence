@@ -1,0 +1,26 @@
+# Values override for Staging Environment
+global:
+  environment: staging
+  demoMode: true
+  devAuthBypass: false
+
+node:
+  id: "node-staging-01"
+  registryUrl: "https://staging-registry.krishinet.brics.agri"
+  messagingProvider: "simulator"
+  retentionDays: 14
+
+ingress:
+  hosts:
+    - host: staging.krishinet.brics.agri
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: api
+        - path: /
+          pathType: Prefix
+          service: web
+  tls:
+    - secretName: staging-krishinet-tls
+      hosts:
+        - staging.krishinet.brics.agri

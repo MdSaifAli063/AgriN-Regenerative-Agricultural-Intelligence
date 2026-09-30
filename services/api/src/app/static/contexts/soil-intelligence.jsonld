@@ -1,0 +1,87 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "schema": "https://schema.org/",
+    "agrovoc": "http://aims.fao.org/aos/agrovoc/",
+    "sosa": "http://www.w3.org/ns/sosa/",
+    "ssn": "http://www.w3.org/ns/ssn/",
+    "geojson": "https://purl.org/geojson/vocab#",
+    "krishinet": "https://krishinet.org/vocab#",
+
+    "SoilObservation": {
+      "@id": "sosa:Observation",
+      "@type": "@id"
+    },
+    "node_id": "krishinet:nodeId",
+    "country_iso": {
+      "@id": "krishinet:countryISO",
+      "@type": "@id"
+    },
+    "region_centroid_lat": {
+      "@id": "krishinet:regionCentroidLat",
+      "@type": "xsd:decimal"
+    },
+    "region_centroid_lon": {
+      "@id": "krishinet:regionCentroidLon",
+      "@type": "xsd:decimal"
+    },
+    "observed_at": {
+      "@id": "sosa:resultTime",
+      "@type": "xsd:dateTime"
+    },
+    "properties": {
+      "@id": "sosa:hasResult",
+      "@container": "@index"
+    },
+    "organic_carbon": {
+      "@id": "agrovoc:c_7185",
+      "@type": "xsd:decimal"
+    },
+    "ph": {
+      "@id": "agrovoc:c_5787",
+      "@type": "xsd:decimal"
+    },
+    "nitrogen": {
+      "@id": "agrovoc:c_5228",
+      "@type": "xsd:decimal"
+    },
+    "phosphorus": {
+      "@id": "agrovoc:c_5806",
+      "@type": "xsd:decimal"
+    },
+    "potassium": {
+      "@id": "agrovoc:c_6122",
+      "@type": "xsd:decimal"
+    },
+    "cation_exchange_capacity": {
+      "@id": "agrovoc:c_1416",
+      "@type": "xsd:decimal"
+    },
+    "bulk_density": {
+      "@id": "agrovoc:c_1117",
+      "@type": "xsd:decimal"
+    },
+    "soil_moisture": {
+      "@id": "agrovoc:c_7181",
+      "@type": "xsd:decimal"
+    },
+    "clay": {
+      "@id": "agrovoc:c_1688",
+      "@type": "xsd:decimal"
+    },
+    "health_score": {
+      "@id": "krishinet:soilHealthScore",
+      "@type": "xsd:decimal"
+    },
+    "overall_health": {
+      "@id": "krishinet:overallSoilHealth",
+      "@type": "xsd:string"
+    },
+    "agrovoc_uri": {
+      "@id": "agrovoc:uri",
+      "@type": "@id"
+    },
+    "agrovoc_id": "agrovoc:id"
+  }
+}

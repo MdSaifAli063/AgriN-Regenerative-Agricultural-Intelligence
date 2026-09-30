@@ -1,0 +1,32 @@
+<USER_REQUEST>
+PHASE 7 - INTEROPERABILITY & FEDERATED LEARNING (Node Registry, STAC + JSON-LD Endpoints, Model Hub, Flower Simulation, Climate-Analogue Matching, Consent Management)
+
+Use the Phase 1 schema (nodes, organisations, ml_models, model_cards, federated_rounds, consents, data_sharing_agreements, climate_analogues, outbreak_aggregates, impact_metrics, audit_logs, notifications) and the Phase 2-6 codebase as the single source of truth: ExternalServiceGuard, RBAC and Keycloak roles, has_consent, provenance model, FieldIntelligenceService, Advisory and DiseaseDiagnosis contracts, model registry and serving (Phase 5), outbreak aggregates with k-anonymity and Laplace noise and the interoperability GeoJSON feed (Phase 5), and the Phase 6 frontend TYPED ADAPTER with mock data behind feature flags. Do NOT redesign earlier phases. Only add new files or show changed files in full. This phase REPLACES the Phase 6 mock adapter implementations with real calls: keep the adapter interface and TypeScript types identical wherever possible, and if a type must change, list it in a "Adapter changes" table. If something earlier blocks this phase, tell me in one line, fix it, and continue.
+
+=====================================================
+GOAL
+=====================================================
+Turn KrishiNet from one app into a federated digital public good. Each country runs its own AgriN Node and keeps raw data sovereign. A lightweight BRICS Commons Registry stores only metadata, signed node identities, model cards, aggregated statistics and sharing agreements. Countries can publish and download models, run federated learning without moving raw data, discover climate-analogue regions in other countries, and exchange anonymised outbreak and impact aggregates through open standards (OGC STAC, JSON-LD + FAO AGROVOC, OpenAPI 3.1, GeoJSON). A new country must be able to join in under one day. Everything must work in a local demo with 3 nodes (India, Brazil, South Africa) plus the Registry via `docker compose --prof
+<truncated 20263 bytes>
+========================
+HOW TO DELIVER (output is long)
+=====================================================
+Split into 6 parts. After each part, STOP and wait for me to type "CONTINUE".
+- PART 7A: Registry service (schemas, models, migrations, signed-request auth, endpoints, discovery doc), node bootstrap CLI, node identity, heartbeat, plus tests.
+- PART 7B: egress gate, outbound publisher, inbound sync, external_* tables, data-sharing agreements, Node Passport, "What leaves my country" report, plus tests.
+- PART 7C: STAC API, JSON-LD contexts and AGROVOC mapping + verification script, interop GeoJSON/JSON endpoints, OpenAPI export and conformance doc, plus tests.
+- PART 7D: Model Hub (registry + node sides, signed model cards, install, evaluation gate, promote, rollback), plus tests.
+- PART 7E: Flower federated learning (partitions, strategies, DP clipping/noise, poisoning defence, reports, bridge to the Model Hub and federated_rounds, orchestration endpoints), climate-analogue matching, consent lifecycle (receipts, ledger, revocation propagation), impact aggregation, plus tests.
+- PART 7F: frontend adapter wiring and new screens, updated mocks and E2E tests, docker-compose federation profiles, Helm and NetworkPolicies, Makefile targets, .env.example additions, federation_demo.py, docs (interoperability.md, onboard-a-country.md, limitations), and a "RUN & VERIFY" checklist with exact commands and a 8-step live demo script.
+
+Start with PART 7A now. First, list any earlier-phase conflicts and any "Adapter changes" in at most 3 lines, then deliver.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-09-30T16:31:20+05:30.
+
+The user's current state is as follows:
+Active Document: d:\AgriN & Regenerative Agricultural Intelligence\apps\web\src\app\[locale]\(farmer)\scan\history\page.tsx (LANGUAGE_TSX)
+Cursor is on line: 1
+Other open documents:
+- d:\AgriN & Regenerative Agricultural Intelligence\apps\web\src\app\[locale]\(farmer)\scan\history\page.tsx (LANGUAGE_TSX)
+</ADDITIONAL_METADATA>

@@ -1,0 +1,19 @@
+# Gitleaks Configuration for KrishiNet-BRICS
+title = "KrishiNet Gitleaks Secret Scanner"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Global allowlist for synthetic test fixtures and documentation"
+paths = [
+    '''\.env\.example''',
+    '''services/api/tests/.*''',
+    '''scripts/sim_chat\.py''',
+]
+regexes = [
+    '''AC_dummy_account_sid''',
+    '''krishinet-client-secret-dev''',
+    '''krishinet-brics-super-secret-jwt-key.*''',
+    '''demo-token-.*''',
+]

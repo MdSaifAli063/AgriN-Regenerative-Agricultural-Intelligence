@@ -1,0 +1,24 @@
+# Global Default Owners
+* @krishinet-core-team
+
+# Data Sovereignty, Consent Ledger & Privacy
+/services/api/src/app/federation/consent_manager.py @krishinet-sovereignty-lead
+/services/api/src/app/services/privacy/ @krishinet-sovereignty-lead
+/services/api/src/app/core/logging.py @krishinet-sovereignty-lead
+
+# Messaging Gateway & Conversation Engine
+/services/api/src/app/messaging/ @krishinet-messaging-team
+/scripts/sim_chat.py @krishinet-messaging-team
+
+# Machine Learning, ONNX & Edge Inference
+/ml/ @krishinet-ml-team
+/services/api/src/app/ml/ @krishinet-ml-team
+/services/api/src/app/ai/ @krishinet-agronomy-team
+
+# Infrastructure, Kubernetes & Helm Charts
+/infra/ @krishinet-infra-team
+/.github/workflows/ @krishinet-infra-team
+/docker-compose*.yml @krishinet-infra-team
+
+# Frontend Web Application & PWA
+/apps/web/ @krishinet-frontend-team

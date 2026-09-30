@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "agrin-node.fullname" . }}-api
+  labels:
+    app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: api
+    agrin.org/country: {{ .Values.node.countryIso | quote }}
+spec:
+  {{- if not .Values.api.autoscaling.enabled }}
+  replicas: {{ .Values.api.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: api
+        agrin.org/country: {{ .Values.node.countryIso | quote }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: api
+          securityContext:
+            {{- toYaml .Values.api.securityContext | nindent 12 }}
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          env:
+            - name: NODE_ID
+              value: {{ .Values.node.id | quote }}
+            - name: LOCAL_NODE_COUNTRY_ISO
+              value: {{ .Values.node.countryIso | quote }}
+            - name: NODE_NAME
+              value: {{ .Values.node.name | quote }}
+            - name: REGISTRY_URL
+              value: {{ .Values.node.registryUrl | quote }}
+            - name: DEMO_MODE
+              value: {{ .Values.global.demoMode | quote }}
+            - name: DEV_AUTH_BYPASS
+              value: {{ .Values.global.devAuthBypass | quote }}
+            - name: DEFAULT_MESSAGING_PROVIDER
+              value: {{ .Values.node.messagingProvider | quote }}
+            - name: MESSAGING_RETENTION_DAYS
+              value: {{ .Values.node.retentionDays | quote }}
+            - name: EGRESS_STRICT_MODE
+              value: {{ .Values.egressGate.strictMode | quote }}
+            - name: MIN_K_ANONYMITY
+              value: {{ .Values.egressGate.minKAnonymity | quote }}
+            - name: MAX_COORDINATE_DECIMALS
+              value: {{ .Values.egressGate.maxCoordinateDecimals | quote }}
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            failureThreshold: 30
+            periodSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: cache
+              mountPath: /.cache
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}

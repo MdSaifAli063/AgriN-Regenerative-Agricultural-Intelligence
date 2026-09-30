@@ -1,0 +1,77 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: krishinet-alert-rules
+  namespace: agrin-node
+  labels:
+    role: alert-rules
+    app.kubernetes.io/name: krishinet-alerts
+spec:
+  groups:
+    - name: krishinet-sovereign-node.rules
+      rules:
+        # 1. API Error Budget Burn Alert (SLO 99.5%)
+        - alert: KrishiNetApiHighErrorRate
+          expr: sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m])) * 100 > 1.0
+          for: 3m
+          labels:
+            severity: critical
+            team: platform-core
+          annotations:
+            summary: "KrishiNet API 5xx error rate exceeds 1% (burning SLO error budget)."
+            description: "Current error rate is {{ $value | printf \"%.2f\" }}% over the last 5 minutes."
+
+        # 2. Celery Worker Queue Backlog
+        - alert: KrishiNetCeleryQueueBacklog
+          expr: celery_queue_length{queue="default"} > 100
+          for: 5m
+          labels:
+            severity: warning
+            team: platform-core
+          annotations:
+            summary: "Celery task queue backlog is growing."
+            description: "More than 100 advisory/messaging tasks queued for over 5 minutes."
+
+        # 3. Messaging Provider Outage / Degraded
+        - alert: KrishiNetMessagingProviderDown
+          expr: sum(rate(krishinet_messages_dispatched_total{status="failed"}[5m])) / sum(rate(krishinet_messages_dispatched_total[5m])) > 0.15
+          for: 3m
+          labels:
+            severity: critical
+            team: messaging
+          annotations:
+            summary: "Outbound messaging failure rate exceeds 15%."
+            description: "Provider gateway (Twilio/Meta/Africa's Talking) is rejecting message dispatches."
+
+        # 4. BRICS Central Registry Stale Node
+        - alert: KrishiNetRegistryNodeStale
+          expr: time() - krishinet_node_last_heartbeat_timestamp > 600
+          for: 5m
+          labels:
+            severity: warning
+            team: federation
+          annotations:
+            summary: "Sovereign node has not sent a heartbeat to BRICS Registry in over 10 minutes."
+            description: "Node {{ $labels.country_iso }} is potentially disconnected from federated rounds."
+
+        # 5. Outbound Messaging Budget Threshold (80% Burn)
+        - alert: KrishiNetDailyMessagingBudget80Percent
+          expr: sum(krishinet_messaging_cost_usd_today) >= 40.0
+          for: 1m
+          labels:
+            severity: warning
+            team: finance-ops
+          annotations:
+            summary: "Daily outbound messaging budget has reached 80% ($40 / $50 limit)."
+            description: "Non-urgent broadcasts will be paused if limit is hit to prevent runaway costs."
+
+        # 6. Ingress TLS Certificate Expiry
+        - alert: KrishiNetTlsCertExpiringSoon
+          expr: certmanager_certificate_expiration_timestamp_seconds - time() < 1296000 # 15 days
+          for: 1h
+          labels:
+            severity: warning
+            team: security
+          annotations:
+            summary: "Sovereign Node Ingress TLS Certificate expires in less than 15 days."
+            description: "Cert-Manager renewal for {{ $labels.name }} needs verification."

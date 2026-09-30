@@ -1,0 +1,79 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "schema": "https://schema.org/",
+    "agrovoc": "http://aims.fao.org/aos/agrovoc/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "krishinet": "https://krishinet.org/vocab#",
+
+    "ClimateAnalogue": {
+      "@id": "krishinet:ClimateAnalogue",
+      "@type": "@id"
+    },
+    "id": "dcterms:identifier",
+    "source_node": "krishinet:sourceNode",
+    "country_iso": {
+      "@id": "krishinet:countryISO",
+      "@type": "xsd:string"
+    },
+    "target_country_iso": {
+      "@id": "krishinet:targetCountryISO",
+      "@type": "xsd:string"
+    },
+    "analogue_region": {
+      "@id": "krishinet:analogueRegion",
+      "@type": "xsd:string"
+    },
+    "climate_similarity_score": {
+      "@id": "krishinet:climateSimilarityScore",
+      "@type": "xsd:decimal"
+    },
+    "mean_temp_c": {
+      "@id": "krishinet:meanTemperatureCelsius",
+      "@type": "xsd:decimal"
+    },
+    "mean_precip_mm": {
+      "@id": "krishinet:meanPrecipitationMm",
+      "@type": "xsd:decimal"
+    },
+    "growing_season_months": {
+      "@id": "krishinet:growingSeasonMonths",
+      "@type": "xsd:integer"
+    },
+    "recommended_crops": {
+      "@id": "agrovoc:crop",
+      "@container": "@list"
+    },
+    "recommended_crops_agrovoc": {
+      "@id": "krishinet:recommendedCropsWithAgrovoc",
+      "@container": "@list"
+    },
+    "crop": {
+      "@id": "agrovoc:crop",
+      "@type": "xsd:string"
+    },
+    "agrovoc_uri": {
+      "@id": "agrovoc:uri",
+      "@type": "@id"
+    },
+    "agrovoc_id": "agrovoc:id",
+    "regenerative_practices": {
+      "@id": "krishinet:regenerativePractices",
+      "@container": "@list"
+    },
+    "period_start": {
+      "@id": "schema:startDate",
+      "@type": "xsd:dateTime"
+    },
+    "period_end": {
+      "@id": "schema:endDate",
+      "@type": "xsd:dateTime"
+    },
+    "ingested_at": {
+      "@id": "dcterms:created",
+      "@type": "xsd:dateTime"
+    }
+  }
+}

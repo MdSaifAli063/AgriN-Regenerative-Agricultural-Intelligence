@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "agrin-node.fullname" . }}-beat
+  labels:
+    app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: beat
+    agrin.org/country: {{ .Values.node.countryIso | quote }}
+spec:
+  replicas: 1 # Exactly one instance of Celery Beat to prevent duplicate scheduler tasks
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: beat
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "agrin-node.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: beat
+        agrin.org/country: {{ .Values.node.countryIso | quote }}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: beat
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+          image: "{{ .Values.beat.image.repository }}:{{ .Values.beat.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.beat.image.pullPolicy }}
+          command:
+            - celery
+            - -A
+            - app.workers.celery_app
+            - beat
+            - -l
+            - INFO
+          env:
+            - name: NODE_ID
+              value: {{ .Values.node.id | quote }}
+            - name: LOCAL_NODE_COUNTRY_ISO
+              value: {{ .Values.node.countryIso | quote }}
+            - name: DEMO_MODE
+              value: {{ .Values.global.demoMode | quote }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            {{- toYaml .Values.beat.resources | nindent 12 }}
+      volumes:
+        - name: tmp
+          emptyDir: {}

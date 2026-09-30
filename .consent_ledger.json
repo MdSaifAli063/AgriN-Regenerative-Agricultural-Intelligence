@@ -1,0 +1,482 @@
+[
+  {
+    "block_index": 0,
+    "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "user_id": "farmer-revoked-001",
+    "action": "GRANT",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "User preference update",
+    "timestamp": "2026-09-30T13:47:37.319296+00:00",
+    "receipt_id": "cfadfd5a-6c81-41fd-b8d1-f31900832022",
+    "block_hash": "4bf4905e68560309fb99e76a8aaa956f9ed2dce435cc3b58be0ca4094d4e6418"
+  },
+  {
+    "block_index": 1,
+    "prev_hash": "4bf4905e68560309fb99e76a8aaa956f9ed2dce435cc3b58be0ca4094d4e6418",
+    "user_id": "farmer-revoked-001",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Farmer opted out of model training",
+    "timestamp": "2026-09-30T13:47:37.324298+00:00",
+    "receipt_id": "0b5b260d-0b98-49bc-84ba-bd60aeee5a65",
+    "block_hash": "0177dfd0d75ebb072b4dcdfd47e62c1d2f798c51702f32aa22ef821013626dc6"
+  },
+  {
+    "block_index": 2,
+    "prev_hash": "0177dfd0d75ebb072b4dcdfd47e62c1d2f798c51702f32aa22ef821013626dc6",
+    "user_id": "farmer-7e-test",
+    "action": "UPDATE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "Farmer updated preferences",
+    "timestamp": "2026-09-30T13:47:38.411978+00:00",
+    "receipt_id": "48bb32b8-28ab-451e-8f30-b53ea7a04d01",
+    "block_hash": "87983fbdd8f8c8e1bc011379c6b8e215412cbc53ed5bbd4e34c9590b80255806"
+  },
+  {
+    "block_index": 3,
+    "prev_hash": "87983fbdd8f8c8e1bc011379c6b8e215412cbc53ed5bbd4e34c9590b80255806",
+    "user_id": "farmer-7e-test",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Revoked participation in model training",
+    "timestamp": "2026-09-30T13:47:38.426265+00:00",
+    "receipt_id": "be581001-d13a-4444-b521-7259770732da",
+    "block_hash": "fe01aa0b212291b37e6cceabbfc7d1ba444aa48e3a58d935a78f750db1faea10"
+  },
+  {
+    "block_index": 4,
+    "prev_hash": "fe01aa0b212291b37e6cceabbfc7d1ba444aa48e3a58d935a78f750db1faea10",
+    "user_id": "farmer-revoked-001",
+    "action": "GRANT",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "User preference update",
+    "timestamp": "2026-09-30T13:48:58.016339+00:00",
+    "receipt_id": "e269b266-751b-4770-ad17-bc5fea76a15b",
+    "block_hash": "f67fdecf0c9cd82fbf44a92bb7ac93e3c4a5b69a0ca9e99e5879cb426baa3241"
+  },
+  {
+    "block_index": 5,
+    "prev_hash": "f67fdecf0c9cd82fbf44a92bb7ac93e3c4a5b69a0ca9e99e5879cb426baa3241",
+    "user_id": "farmer-revoked-001",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Farmer opted out of model training",
+    "timestamp": "2026-09-30T13:48:58.020339+00:00",
+    "receipt_id": "7a170860-c43b-45ac-8ab4-081c99be4bf6",
+    "block_hash": "3c4e452ad0cde9f9345da6f46389280f6fc5a40876d277e4a493117111eb642f"
+  },
+  {
+    "block_index": 6,
+    "prev_hash": "3c4e452ad0cde9f9345da6f46389280f6fc5a40876d277e4a493117111eb642f",
+    "user_id": "farmer-7e-test",
+    "action": "UPDATE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "Farmer updated preferences",
+    "timestamp": "2026-09-30T13:48:58.928769+00:00",
+    "receipt_id": "9c361362-b1c2-4705-bc89-469c6bafffac",
+    "block_hash": "4363ffbe57d1261e138c731559e0a274033fb3bea5fb8e1b50cecf6157004265"
+  },
+  {
+    "block_index": 7,
+    "prev_hash": "4363ffbe57d1261e138c731559e0a274033fb3bea5fb8e1b50cecf6157004265",
+    "user_id": "farmer-7e-test",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Revoked participation in model training",
+    "timestamp": "2026-09-30T13:48:58.942986+00:00",
+    "receipt_id": "88996fa3-40f1-4cc4-9ab0-800a8c2807fa",
+    "block_hash": "a9598f26005053dd7227cfd3a274b37742df28ba24d7163e63c6cdf5b965d82a"
+  },
+  {
+    "block_index": 8,
+    "prev_hash": "a9598f26005053dd7227cfd3a274b37742df28ba24d7163e63c6cdf5b965d82a",
+    "user_id": "farmer-revoked-001",
+    "action": "GRANT",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "User preference update",
+    "timestamp": "2026-09-30T14:08:49.560827+00:00",
+    "receipt_id": "04ebaeea-d817-43df-bef7-6d20c3e05947",
+    "block_hash": "beddd3b9d27dcd34d7ad4b62a9ccd23691d4658d99bed5e0a8e23f3c87593a7e"
+  },
+  {
+    "block_index": 9,
+    "prev_hash": "beddd3b9d27dcd34d7ad4b62a9ccd23691d4658d99bed5e0a8e23f3c87593a7e",
+    "user_id": "farmer-revoked-001",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Farmer opted out of model training",
+    "timestamp": "2026-09-30T14:08:49.563845+00:00",
+    "receipt_id": "fd70b335-8b3b-4214-820b-352d257a668b",
+    "block_hash": "334c408a423412e754b327d60a86090922f075bd0c3ad90f5046347a9efa9f8a"
+  },
+  {
+    "block_index": 10,
+    "prev_hash": "334c408a423412e754b327d60a86090922f075bd0c3ad90f5046347a9efa9f8a",
+    "user_id": "farmer-7e-test",
+    "action": "UPDATE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "Farmer updated preferences",
+    "timestamp": "2026-09-30T14:08:50.471148+00:00",
+    "receipt_id": "22ffa713-68f5-47c6-ba57-634da8068c9d",
+    "block_hash": "bb74832cbec7e0d4e1c4728ace935cadfa0f5b0f99d581faa9828337ff84cfc9"
+  },
+  {
+    "block_index": 11,
+    "prev_hash": "bb74832cbec7e0d4e1c4728ace935cadfa0f5b0f99d581faa9828337ff84cfc9",
+    "user_id": "farmer-7e-test",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Revoked participation in model training",
+    "timestamp": "2026-09-30T14:08:50.485089+00:00",
+    "receipt_id": "c55fe2f8-5dbc-472d-ae12-0b597577dc6c",
+    "block_hash": "6c3b801163d97f4577a9df9c58bf8b5b5fed6aa1fe75df7a050b4435f6bdecaf"
+  },
+  {
+    "block_index": 12,
+    "prev_hash": "6c3b801163d97f4577a9df9c58bf8b5b5fed6aa1fe75df7a050b4435f6bdecaf",
+    "user_id": "farmer-revoked-001",
+    "action": "GRANT",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "User preference update",
+    "timestamp": "2026-09-30T14:10:26.985176+00:00",
+    "receipt_id": "e44a9ac6-e526-490c-9867-86100b8f3f3f",
+    "block_hash": "ab8b0221ad4fd2e123d5d569143d84c77cb0bb1aa4be907a365492b9b505b4d1"
+  },
+  {
+    "block_index": 13,
+    "prev_hash": "ab8b0221ad4fd2e123d5d569143d84c77cb0bb1aa4be907a365492b9b505b4d1",
+    "user_id": "farmer-revoked-001",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Farmer opted out of model training",
+    "timestamp": "2026-09-30T14:10:26.989161+00:00",
+    "receipt_id": "3dfafbd4-07d1-404f-af62-26eff13aad24",
+    "block_hash": "8782a57cb3c91b1d311cd84f119af19a898999a0c415887d9c042da6d01ec5df"
+  },
+  {
+    "block_index": 14,
+    "prev_hash": "8782a57cb3c91b1d311cd84f119af19a898999a0c415887d9c042da6d01ec5df",
+    "user_id": "farmer-7e-test",
+    "action": "UPDATE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "Farmer updated preferences",
+    "timestamp": "2026-09-30T14:10:28.060064+00:00",
+    "receipt_id": "90162db5-8645-433b-914b-b81b9faca02d",
+    "block_hash": "95df33d9547e0c7e3921244b04b3b343c3b4e76f58e1967ec8c7773bf10b1f04"
+  },
+  {
+    "block_index": 15,
+    "prev_hash": "95df33d9547e0c7e3921244b04b3b343c3b4e76f58e1967ec8c7773bf10b1f04",
+    "user_id": "farmer-7e-test",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Revoked participation in model training",
+    "timestamp": "2026-09-30T14:10:28.072941+00:00",
+    "receipt_id": "bb56834c-5bc1-41ef-bbf9-8fb1d50ce905",
+    "block_hash": "627c427eab1199c00c1e364ae9264afe2704e72d647815ca0736e7fd6ca77a32"
+  },
+  {
+    "block_index": 16,
+    "prev_hash": "627c427eab1199c00c1e364ae9264afe2704e72d647815ca0736e7fd6ca77a32",
+    "user_id": "farmer-revoked-001",
+    "action": "GRANT",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "User preference update",
+    "timestamp": "2026-09-30T14:11:10.958912+00:00",
+    "receipt_id": "1b798d2e-c24b-454d-a5ef-6695081b9ca2",
+    "block_hash": "ca42fed56feb771fc7417dca87b1a4988dcec531ccd759aa0307bb7a98dbc15e"
+  },
+  {
+    "block_index": 17,
+    "prev_hash": "ca42fed56feb771fc7417dca87b1a4988dcec531ccd759aa0307bb7a98dbc15e",
+    "user_id": "farmer-revoked-001",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Farmer opted out of model training",
+    "timestamp": "2026-09-30T14:11:10.962894+00:00",
+    "receipt_id": "593c26de-479d-4a7d-a243-56404cf10c9c",
+    "block_hash": "c20087b9ad82869dda9badaa7c0a0ccf0850c8e41a44dea3c3c00cae4a3a6987"
+  },
+  {
+    "block_index": 18,
+    "prev_hash": "c20087b9ad82869dda9badaa7c0a0ccf0850c8e41a44dea3c3c00cae4a3a6987",
+    "user_id": "farmer-7e-test",
+    "action": "UPDATE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "Farmer updated preferences",
+    "timestamp": "2026-09-30T14:11:11.989704+00:00",
+    "receipt_id": "fede0539-2a0f-4a38-b656-5e8d7d29a7f6",
+    "block_hash": "7b126453da9ccae586cccafd89bedee53d04c8871938b11ed1136eec54a98559"
+  },
+  {
+    "block_index": 19,
+    "prev_hash": "7b126453da9ccae586cccafd89bedee53d04c8871938b11ed1136eec54a98559",
+    "user_id": "farmer-7e-test",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Revoked participation in model training",
+    "timestamp": "2026-09-30T14:11:12.004594+00:00",
+    "receipt_id": "0d241512-85aa-4cab-a04c-1a6f96ae3148",
+    "block_hash": "1f0c42238c81449d467f3b12361a777b267ff9e38b60b890322eb809fe915f7a"
+  },
+  {
+    "block_index": 20,
+    "prev_hash": "1f0c42238c81449d467f3b12361a777b267ff9e38b60b890322eb809fe915f7a",
+    "user_id": "farmer-revoked-001",
+    "action": "GRANT",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "User preference update",
+    "timestamp": "2026-09-30T14:12:41.413451+00:00",
+    "receipt_id": "04fe2b27-383f-4152-898e-38dbb30fd455",
+    "block_hash": "fa97fe7f3160e7042ff50d21c4b0233f76554201110c6d67fc7064ba5aedc294"
+  },
+  {
+    "block_index": 21,
+    "prev_hash": "fa97fe7f3160e7042ff50d21c4b0233f76554201110c6d67fc7064ba5aedc294",
+    "user_id": "farmer-revoked-001",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Farmer opted out of model training",
+    "timestamp": "2026-09-30T14:12:41.416435+00:00",
+    "receipt_id": "c5fa0162-f4ff-4f25-89db-de360d9262a8",
+    "block_hash": "1aa797f2318e8ba04f5875f593be5ce9372c76f53e1488862bee4374c588656a"
+  },
+  {
+    "block_index": 22,
+    "prev_hash": "1aa797f2318e8ba04f5875f593be5ce9372c76f53e1488862bee4374c588656a",
+    "user_id": "farmer-7e-test",
+    "action": "UPDATE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "Farmer updated preferences",
+    "timestamp": "2026-09-30T14:12:42.369264+00:00",
+    "receipt_id": "a08b10f6-877a-44e1-89d5-54e3c0446f63",
+    "block_hash": "66044d36ce17672d3bb7fbd825bea0038ce77ad9ecbfffc32130df84f1ef4e7d"
+  },
+  {
+    "block_index": 23,
+    "prev_hash": "66044d36ce17672d3bb7fbd825bea0038ce77ad9ecbfffc32130df84f1ef4e7d",
+    "user_id": "farmer-7e-test",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Revoked participation in model training",
+    "timestamp": "2026-09-30T14:12:42.382266+00:00",
+    "receipt_id": "9d2b7ddb-a614-4084-bf82-ea77647d809b",
+    "block_hash": "0dadbd726a5d1a38bf32325eacf5895ac4565cc8ecc8dc47d2d9507105b90a8c"
+  },
+  {
+    "block_index": 24,
+    "prev_hash": "0dadbd726a5d1a38bf32325eacf5895ac4565cc8ecc8dc47d2d9507105b90a8c",
+    "user_id": "farmer-revoked-001",
+    "action": "GRANT",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "User preference update",
+    "timestamp": "2026-09-30T16:51:51.806201+00:00",
+    "receipt_id": "850baba2-03a0-4b95-bdb0-a43840fb209c",
+    "block_hash": "d0680e0c0f6986ac801cac3c510b76162a42f7ca95bf41f407d104f269d886ad"
+  },
+  {
+    "block_index": 25,
+    "prev_hash": "d0680e0c0f6986ac801cac3c510b76162a42f7ca95bf41f407d104f269d886ad",
+    "user_id": "farmer-revoked-001",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Farmer opted out of model training",
+    "timestamp": "2026-09-30T16:51:51.810268+00:00",
+    "receipt_id": "5bf99799-9e62-45fa-b09f-0dd062646bf9",
+    "block_hash": "36b56bf2711f174fdc0a5e976dfd8ed7f2abf0dc83db14d89f4afdbbd459d02b"
+  },
+  {
+    "block_index": 26,
+    "prev_hash": "36b56bf2711f174fdc0a5e976dfd8ed7f2abf0dc83db14d89f4afdbbd459d02b",
+    "user_id": "farmer-7e-test",
+    "action": "UPDATE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "Farmer updated preferences",
+    "timestamp": "2026-09-30T16:51:53.291636+00:00",
+    "receipt_id": "f62f6197-baca-4a85-ab49-03454e52665f",
+    "block_hash": "34a3402b94c4dc6be53f56fa141e40f463eebbfc375938d935e3db000310b7a2"
+  },
+  {
+    "block_index": 27,
+    "prev_hash": "34a3402b94c4dc6be53f56fa141e40f463eebbfc375938d935e3db000310b7a2",
+    "user_id": "farmer-7e-test",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Revoked participation in model training",
+    "timestamp": "2026-09-30T16:51:53.312820+00:00",
+    "receipt_id": "788652cf-aa39-4e34-ba19-71b671698389",
+    "block_hash": "70714e94ea559d85d84412b88be0e7438e5f8f3262eefffdf0fce102bc046ac4"
+  },
+  {
+    "block_index": 28,
+    "prev_hash": "70714e94ea559d85d84412b88be0e7438e5f8f3262eefffdf0fce102bc046ac4",
+    "user_id": "farmer-revoked-001",
+    "action": "GRANT",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "User preference update",
+    "timestamp": "2026-09-30T18:03:59.414934+00:00",
+    "receipt_id": "ef784247-6fcd-4ecf-a6ee-f389f6768b30",
+    "block_hash": "51106108640e51a00a4bd2fc0d3b63394a2946277ba97ffe356a1e4daa27b991"
+  },
+  {
+    "block_index": 29,
+    "prev_hash": "51106108640e51a00a4bd2fc0d3b63394a2946277ba97ffe356a1e4daa27b991",
+    "user_id": "farmer-revoked-001",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Farmer opted out of model training",
+    "timestamp": "2026-09-30T18:03:59.418432+00:00",
+    "receipt_id": "f267524e-c9be-4d87-bb3b-1dc92a4a3a5a",
+    "block_hash": "ab78d8da0e8e7b0fbcd7768a190ea6642bd8dcc1c677bff99d35a3c8e8e93207"
+  },
+  {
+    "block_index": 30,
+    "prev_hash": "ab78d8da0e8e7b0fbcd7768a190ea6642bd8dcc1c677bff99d35a3c8e8e93207",
+    "user_id": "farmer-7e-test",
+    "action": "UPDATE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": true
+    },
+    "reason": "Farmer updated preferences",
+    "timestamp": "2026-09-30T18:04:00.540049+00:00",
+    "receipt_id": "b01d9dad-0791-478a-a68d-5561d99069c0",
+    "block_hash": "3e4a4d508e76733ebf80a0ca059ee134e2d871e7d9019e81a4aae99a39ed6284"
+  },
+  {
+    "block_index": 31,
+    "prev_hash": "3e4a4d508e76733ebf80a0ca059ee134e2d871e7d9019e81a4aae99a39ed6284",
+    "user_id": "farmer-7e-test",
+    "action": "REVOKE",
+    "scopes": {
+      "share_anonymized_soil": true,
+      "share_outbreak_telemetry": true,
+      "participate_in_federated_learning": false
+    },
+    "reason": "Revoked participation in model training",
+    "timestamp": "2026-09-30T18:04:00.554049+00:00",
+    "receipt_id": "6ac5ba76-9cd3-46ef-beff-5cb763b04d15",
+    "block_hash": "6bc7aecf38079b0162fe0c9c0cb50f68b7a579470321e9e987799f5f50f92e93"
+  }
+]

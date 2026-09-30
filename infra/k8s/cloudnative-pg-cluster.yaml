@@ -1,0 +1,82 @@
+# ==============================================================================
+# CloudNativePG (CNPG) Cluster Specification for Sovereign AgriN Node
+# Deploys high-availability PostgreSQL 16 with PostGIS 3.4 + pgvector 0.7.0
+# ==============================================================================
+# Provider Compatibility Matrix:
+# - CloudNativePG (Recommended for Sovereign On-Prem / Hybrid K8s): PostGIS YES, pgvector YES
+# - Supabase / Neon: PostGIS YES, pgvector YES (Full support)
+# - AWS RDS / Aurora Postgres (>= 15.3): PostGIS YES, pgvector YES
+# - Google Cloud SQL Postgres (>= 15): PostGIS YES, pgvector YES
+# - Azure Database for PostgreSQL Flexible: PostGIS YES, pgvector YES
+# ==============================================================================
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: agrin-postgres-cluster
+  namespace: agrin-node
+  labels:
+    app.kubernetes.io/name: agrin-postgres
+    app.kubernetes.io/component: database
+spec:
+  instances: 3 # 1 Primary + 2 Streaming Standby Replicas
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2-postgis-vector
+
+  postgresql:
+    parameters:
+      shared_buffers: "1GB"
+      work_mem: "32MB"
+      maintenance_work_mem: "256MB"
+      effective_cache_size: "3GB"
+      max_connections: "200"
+      wal_level: "replica"
+      archive_mode: "on"
+      archive_timeout: "300s"
+      shared_preload_libraries: "vector"
+    pg_hba:
+      - hostssl all all 10.0.0.0/8 cert
+      - host all all all scram-sha-256
+
+  bootstrap:
+    initdb:
+      database: krishinet_db
+      owner: krishinet_admin
+      secret:
+        name: agrin-postgres-superuser-secret
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS postgis;
+        - CREATE EXTENSION IF NOT EXISTS vector;
+        - CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+  storage:
+    size: 50Gi
+    storageClass: standard-rwo
+
+  monitoring:
+    enablePodMonitor: true
+
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://krishinet-backups/postgres
+      endpointURL: http://minio.agrin-node.svc.cluster.local:9000
+      s3Credentials:
+        accessKeyId:
+          name: minio-credentials
+          key: rootUser
+        secretAccessKey:
+          name: minio-credentials
+          key: rootPassword
+      wal:
+        compression: gzip
+        maxParallel: 4
+      data:
+        compression: gzip
+    retentionPolicy: "30d"
+
+  resources:
+    requests:
+      memory: "2Gi"
+      cpu: "1000m"
+    limits:
+      memory: "4Gi"
+      cpu: "2000m"

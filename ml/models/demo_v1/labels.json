@@ -1,0 +1,344 @@
+[
+  {
+    "class_id": 0,
+    "crop": "cotton",
+    "disease_name": "cotton_bacterial_blight",
+    "display_name": "Cotton Bacterial Blight",
+    "is_healthy": false,
+    "agrovoc_id": "c_9381",
+    "scientific_name": "Xanthomonas citri pv. malvacearum"
+  },
+  {
+    "class_id": 1,
+    "crop": "cotton",
+    "disease_name": "cotton_leaf_curl_virus",
+    "display_name": "Cotton Leaf Curl Virus",
+    "is_healthy": false,
+    "agrovoc_id": "c_29571",
+    "scientific_name": "Cotton leaf curl virus (CLCuV)"
+  },
+  {
+    "class_id": 2,
+    "crop": "cotton",
+    "disease_name": "cotton_healthy",
+    "display_name": "Cotton (Healthy)",
+    "is_healthy": true,
+    "agrovoc_id": "c_1940",
+    "scientific_name": "Gossypium hirsutum"
+  },
+  {
+    "class_id": 3,
+    "crop": "soybean",
+    "disease_name": "soybean_rust",
+    "display_name": "Asian Soybean Rust",
+    "is_healthy": false,
+    "agrovoc_id": "c_16035",
+    "scientific_name": "Phakopsora pachyrhizi"
+  },
+  {
+    "class_id": 4,
+    "crop": "soybean",
+    "disease_name": "soybean_bacterial_blight",
+    "display_name": "Soybean Bacterial Blight",
+    "is_healthy": false,
+    "agrovoc_id": "c_9382",
+    "scientific_name": "Pseudomonas savastanoi pv. glycinea"
+  },
+  {
+    "class_id": 5,
+    "crop": "soybean",
+    "disease_name": "soybean_healthy",
+    "display_name": "Soybean (Healthy)",
+    "is_healthy": true,
+    "agrovoc_id": "c_3306",
+    "scientific_name": "Glycine max"
+  },
+  {
+    "class_id": 6,
+    "crop": "maize",
+    "disease_name": "maize_common_rust",
+    "display_name": "Maize Common Rust",
+    "is_healthy": false,
+    "agrovoc_id": "c_16034",
+    "scientific_name": "Puccinia sorghi"
+  },
+  {
+    "class_id": 7,
+    "crop": "maize",
+    "disease_name": "maize_northern_leaf_blight",
+    "display_name": "Northern Corn Leaf Blight",
+    "is_healthy": false,
+    "agrovoc_id": "c_7034",
+    "scientific_name": "Exserohilum turcicum"
+  },
+  {
+    "class_id": 8,
+    "crop": "maize",
+    "disease_name": "maize_gray_leaf_spot",
+    "display_name": "Maize Gray Leaf Spot",
+    "is_healthy": false,
+    "agrovoc_id": "c_1492",
+    "scientific_name": "Cercospora zeae-maydis"
+  },
+  {
+    "class_id": 9,
+    "crop": "maize",
+    "disease_name": "maize_healthy",
+    "display_name": "Maize (Healthy)",
+    "is_healthy": true,
+    "agrovoc_id": "c_8514",
+    "scientific_name": "Zea mays"
+  },
+  {
+    "class_id": 10,
+    "crop": "rice",
+    "disease_name": "rice_blast",
+    "display_name": "Rice Blast",
+    "is_healthy": false,
+    "agrovoc_id": "c_6234",
+    "scientific_name": "Magnaporthe oryzae"
+  },
+  {
+    "class_id": 11,
+    "crop": "rice",
+    "disease_name": "rice_brown_spot",
+    "display_name": "Rice Brown Spot",
+    "is_healthy": false,
+    "agrovoc_id": "c_1852",
+    "scientific_name": "Bipolaris oryzae"
+  },
+  {
+    "class_id": 12,
+    "crop": "rice",
+    "disease_name": "rice_healthy",
+    "display_name": "Rice (Healthy)",
+    "is_healthy": true,
+    "agrovoc_id": "c_5497",
+    "scientific_name": "Oryza sativa"
+  },
+  {
+    "class_id": 13,
+    "crop": "wheat",
+    "disease_name": "wheat_septoria",
+    "display_name": "Wheat Septoria Leaf Blotch",
+    "is_healthy": false,
+    "agrovoc_id": "c_7009",
+    "scientific_name": "Zymoseptoria tritici"
+  },
+  {
+    "class_id": 14,
+    "crop": "wheat",
+    "disease_name": "wheat_stripe_rust",
+    "display_name": "Wheat Yellow Stripe Rust",
+    "is_healthy": false,
+    "agrovoc_id": "c_16036",
+    "scientific_name": "Puccinia striiformis"
+  },
+  {
+    "class_id": 15,
+    "crop": "wheat",
+    "disease_name": "wheat_healthy",
+    "display_name": "Wheat (Healthy)",
+    "is_healthy": true,
+    "agrovoc_id": "c_8157",
+    "scientific_name": "Triticum aestivum"
+  },
+  {
+    "class_id": 16,
+    "crop": "tomato",
+    "disease_name": "tomato_bacterial_spot",
+    "display_name": "Tomato Bacterial Spot",
+    "is_healthy": false,
+    "agrovoc_id": "c_9383",
+    "scientific_name": "Xanthomonas vesicatoria"
+  },
+  {
+    "class_id": 17,
+    "crop": "tomato",
+    "disease_name": "tomato_early_blight",
+    "display_name": "Tomato Early Blight",
+    "is_healthy": false,
+    "agrovoc_id": "c_408",
+    "scientific_name": "Alternaria solani"
+  },
+  {
+    "class_id": 18,
+    "crop": "tomato",
+    "disease_name": "tomato_late_blight",
+    "display_name": "Tomato Late Blight",
+    "is_healthy": false,
+    "agrovoc_id": "c_5868",
+    "scientific_name": "Phytophthora infestans"
+  },
+  {
+    "class_id": 19,
+    "crop": "tomato",
+    "disease_name": "tomato_leaf_mold",
+    "display_name": "Tomato Leaf Mold",
+    "is_healthy": false,
+    "agrovoc_id": "c_1615",
+    "scientific_name": "Passalora fulva"
+  },
+  {
+    "class_id": 20,
+    "crop": "tomato",
+    "disease_name": "tomato_septoria_leaf_spot",
+    "display_name": "Tomato Septoria Spot",
+    "is_healthy": false,
+    "agrovoc_id": "c_7010",
+    "scientific_name": "Septoria lycopersici"
+  },
+  {
+    "class_id": 21,
+    "crop": "tomato",
+    "disease_name": "tomato_spider_mites",
+    "display_name": "Tomato Two-Spotted Spider Mite",
+    "is_healthy": false,
+    "agrovoc_id": "c_7721",
+    "scientific_name": "Tetranychus urticae"
+  },
+  {
+    "class_id": 22,
+    "crop": "tomato",
+    "disease_name": "tomato_target_spot",
+    "display_name": "Tomato Target Spot",
+    "is_healthy": false,
+    "agrovoc_id": "c_2069",
+    "scientific_name": "Corynespora cassiicola"
+  },
+  {
+    "class_id": 23,
+    "crop": "tomato",
+    "disease_name": "tomato_yellow_leaf_curl_virus",
+    "display_name": "Tomato Yellow Leaf Curl",
+    "is_healthy": false,
+    "agrovoc_id": "c_29572",
+    "scientific_name": "Tomato yellow leaf curl virus"
+  },
+  {
+    "class_id": 24,
+    "crop": "tomato",
+    "disease_name": "tomato_mosaic_virus",
+    "display_name": "Tomato Mosaic Virus",
+    "is_healthy": false,
+    "agrovoc_id": "c_7867",
+    "scientific_name": "Tomato mosaic virus (ToMV)"
+  },
+  {
+    "class_id": 25,
+    "crop": "tomato",
+    "disease_name": "tomato_healthy",
+    "display_name": "Tomato (Healthy)",
+    "is_healthy": true,
+    "agrovoc_id": "c_4488",
+    "scientific_name": "Solanum lycopersicum"
+  },
+  {
+    "class_id": 26,
+    "crop": "potato",
+    "disease_name": "potato_early_blight",
+    "display_name": "Potato Early Blight",
+    "is_healthy": false,
+    "agrovoc_id": "c_408",
+    "scientific_name": "Alternaria solani"
+  },
+  {
+    "class_id": 27,
+    "crop": "potato",
+    "disease_name": "potato_late_blight",
+    "display_name": "Potato Late Blight",
+    "is_healthy": false,
+    "agrovoc_id": "c_5868",
+    "scientific_name": "Phytophthora infestans"
+  },
+  {
+    "class_id": 28,
+    "crop": "potato",
+    "disease_name": "potato_healthy",
+    "display_name": "Potato (Healthy)",
+    "is_healthy": true,
+    "agrovoc_id": "c_7214",
+    "scientific_name": "Solanum tuberosum"
+  },
+  {
+    "class_id": 29,
+    "crop": "pepper",
+    "disease_name": "pepper_bacterial_spot",
+    "display_name": "Pepper Bacterial Spot",
+    "is_healthy": false,
+    "agrovoc_id": "c_9383",
+    "scientific_name": "Xanthomonas vesicatoria"
+  },
+  {
+    "class_id": 30,
+    "crop": "pepper",
+    "disease_name": "pepper_healthy",
+    "display_name": "Pepper (Healthy)",
+    "is_healthy": true,
+    "agrovoc_id": "c_1258",
+    "scientific_name": "Capsicum annuum"
+  },
+  {
+    "class_id": 31,
+    "crop": "apple",
+    "disease_name": "apple_scab",
+    "display_name": "Apple Scab",
+    "is_healthy": false,
+    "agrovoc_id": "c_8213",
+    "scientific_name": "Venturia inaequalis"
+  },
+  {
+    "class_id": 32,
+    "crop": "apple",
+    "disease_name": "apple_black_rot",
+    "display_name": "Apple Black Rot",
+    "is_healthy": false,
+    "agrovoc_id": "c_1012",
+    "scientific_name": "Botryosphaeria obtusa"
+  },
+  {
+    "class_id": 33,
+    "crop": "apple",
+    "disease_name": "apple_cedar_rust",
+    "display_name": "Cedar Apple Rust",
+    "is_healthy": false,
+    "agrovoc_id": "c_3467",
+    "scientific_name": "Gymnosporangium juniperi-virginianae"
+  },
+  {
+    "class_id": 34,
+    "crop": "apple",
+    "disease_name": "apple_healthy",
+    "display_name": "Apple (Healthy)",
+    "is_healthy": true,
+    "agrovoc_id": "c_511",
+    "scientific_name": "Malus domestica"
+  },
+  {
+    "class_id": 35,
+    "crop": "grape",
+    "disease_name": "grape_black_rot",
+    "display_name": "Grape Black Rot",
+    "is_healthy": false,
+    "agrovoc_id": "c_3396",
+    "scientific_name": "Guignardia bidwellii"
+  },
+  {
+    "class_id": 36,
+    "crop": "grape",
+    "disease_name": "grape_esca",
+    "display_name": "Grape Esca (Black Measles)",
+    "is_healthy": false,
+    "agrovoc_id": "c_2658",
+    "scientific_name": "Phaeomoniella chlamydospora"
+  },
+  {
+    "class_id": 37,
+    "crop": "grape",
+    "disease_name": "grape_healthy",
+    "display_name": "Grape (Healthy)",
+    "is_healthy": true,
+    "agrovoc_id": "c_8366",
+    "scientific_name": "Vitis vinifera"
+  }
+]

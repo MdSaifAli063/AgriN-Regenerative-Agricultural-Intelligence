@@ -1,0 +1,75 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "schema": "https://schema.org/",
+    "agrovoc": "http://aims.fao.org/aos/agrovoc/",
+    "geojson": "https://purl.org/geojson/vocab#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "krishinet": "https://krishinet.org/vocab#",
+    "sdmx": "https://sdmx.org/resources/sdmxml/schemas/v2_1/common#",
+
+    "OutbreakAggregate": {
+      "@id": "krishinet:OutbreakAggregate",
+      "@type": "@id"
+    },
+    "id": "dcterms:identifier",
+    "source_node": "krishinet:sourceNode",
+    "country_iso": {
+      "@id": "krishinet:countryISO",
+      "@type": "xsd:string"
+    },
+    "disease": {
+      "@id": "krishinet:disease",
+      "@type": "xsd:string"
+    },
+    "disease_agrovoc_uri": {
+      "@id": "agrovoc:pest",
+      "@type": "@id"
+    },
+    "crop": {
+      "@id": "agrovoc:crop",
+      "@type": "xsd:string"
+    },
+    "crop_agrovoc_uri": {
+      "@id": "agrovoc:cropURI",
+      "@type": "@id"
+    },
+    "case_count": {
+      "@id": "sdmx:obsValue",
+      "@type": "xsd:integer"
+    },
+    "k_anonymity_value": {
+      "@id": "krishinet:kAnonymityValue",
+      "@type": "xsd:integer"
+    },
+    "laplace_noise_applied": {
+      "@id": "krishinet:laplaceNoiseApplied",
+      "@type": "xsd:boolean"
+    },
+    "region_centroid_lat": {
+      "@id": "geojson:latitude",
+      "@type": "xsd:decimal"
+    },
+    "region_centroid_lon": {
+      "@id": "geojson:longitude",
+      "@type": "xsd:decimal"
+    },
+    "severity": {
+      "@id": "krishinet:outbreakSeverity",
+      "@type": "xsd:string"
+    },
+    "period_start": {
+      "@id": "schema:startDate",
+      "@type": "xsd:dateTime"
+    },
+    "period_end": {
+      "@id": "schema:endDate",
+      "@type": "xsd:dateTime"
+    },
+    "ingested_at": {
+      "@id": "dcterms:created",
+      "@type": "xsd:dateTime"
+    }
+  }
+}

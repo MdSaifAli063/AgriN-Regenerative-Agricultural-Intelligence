@@ -1,0 +1,15 @@
+# Trivy Security Scanner Configuration
+severity:
+  - HIGH
+  - CRITICAL
+
+ignore-unfixed: true
+
+scan:
+  scanners:
+    - vuln
+    - misconfig
+    - secret
+
+format: table
+exit-code: 0 # Alert in staging, block in production

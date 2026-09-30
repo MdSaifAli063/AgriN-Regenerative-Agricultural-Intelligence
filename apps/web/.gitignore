@@ -1,0 +1,24 @@
+# Next.js local .gitignore
+node_modules/
+.next/
+out/
+.pnpm-store/
+
+# Environment files
+.env*.local
+
+# Serwist PWA build artifacts
+public/sw.js
+public/sw.js.map
+public/workbox-*.js
+public/workbox-*.js.map
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing & coverage
+coverage/
+.vitest/

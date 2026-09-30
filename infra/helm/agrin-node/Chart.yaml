@@ -1,0 +1,16 @@
+apiVersion: v2
+name: agrin-node
+description: Sovereign AgriN Node Helm Chart for BRICS Agricultural Commons
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - agriculture
+  - brics
+  - digital-public-good
+  - federated-learning
+  - sovereign-data
+home: https://krishinet.org
+maintainers:
+  - name: KrishiNet Engineering Team
+    email: admin@krishinet.org

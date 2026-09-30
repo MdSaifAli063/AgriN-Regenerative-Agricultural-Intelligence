@@ -1,0 +1,126 @@
+{
+  "realm": "krishinet",
+  "enabled": true,
+  "displayName": "KrishiNet-BRICS Sovereign Realm",
+  "sslRequired": "external",
+  "registrationAllowed": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "farmer",
+        "description": "Smallholder or commercial farmer with farm management rights"
+      },
+      {
+        "name": "extension_officer",
+        "description": "Agronomy officer monitoring district outbreaks and broadcasting advisories"
+      },
+      {
+        "name": "government_admin",
+        "description": "Sovereign node administrator managing national registries"
+      },
+      {
+        "name": "researcher",
+        "description": "Agronomy researcher with Model Hub and cross-border analytics access"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "krishinet-api",
+      "name": "KrishiNet Backend API",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "krishinet-client-secret-dev",
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": true,
+      "redirectUris": [
+        "http://localhost:3000/*",
+        "http://localhost:8000/*"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "farmer_ind",
+      "email": "ramesh.patil@krishinet.org",
+      "firstName": "Ramesh",
+      "lastName": "Patil",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "KrishiFarmer2026!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["farmer"],
+      "attributes": {
+        "country": ["IND"],
+        "phone": ["+919876543210"]
+      }
+    },
+    {
+      "username": "officer_ind",
+      "email": "dr.priya.sharma@icar.gov.in",
+      "firstName": "Priya",
+      "lastName": "Sharma",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "KrishiOfficer2026!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["extension_officer"],
+      "attributes": {
+        "country": ["IND"],
+        "district": ["Wardha"]
+      }
+    },
+    {
+      "username": "admin_ind",
+      "email": "admin@agricoop.nic.in",
+      "firstName": "Rajesh",
+      "lastName": "Verma",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "KrishiAdmin2026!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["government_admin"],
+      "attributes": {
+        "country": ["IND"]
+      }
+    },
+    {
+      "username": "researcher_brics",
+      "email": "dr.lucas.ferreira@embrapa.br",
+      "firstName": "Lucas",
+      "lastName": "Ferreira",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "KrishiResearcher2026!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["researcher"],
+      "attributes": {
+        "country": ["BRA"]
+      }
+    }
+  ]
+}

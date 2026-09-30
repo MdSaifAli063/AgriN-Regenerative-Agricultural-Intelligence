@@ -1,0 +1,14 @@
+apiVersion: v2
+name: brics-registry
+description: Central BRICS Agricultural Commons Registry for Node Metadata, Model Cards & Aggregate Indicators
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - brics
+  - registry
+  - digital-public-good
+  - model-hub
+maintainers:
+  - name: BRICS Agricultural Working Group
+    email: commons@krishinet.org

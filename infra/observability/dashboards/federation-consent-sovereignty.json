@@ -1,0 +1,62 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "id": null,
+  "panels": [
+    {
+      "title": "Federated Learning Egress Records",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(rate(krishinet_federation_egress_total[1h])) by (country)",
+          "legendFormat": "{{country}} Egress"
+        }
+      ]
+    },
+    {
+      "title": "Differential Privacy Epsilon Budget Spent",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "krishinet_dp_epsilon_cumulative",
+          "legendFormat": "Cumulative ε"
+        }
+      ]
+    },
+    {
+      "title": "Consent Grants vs Revocations",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum(rate(krishinet_consent_events_total{action=\"grant\"}[1h]))",
+          "legendFormat": "Grants"
+        },
+        {
+          "expr": "sum(rate(krishinet_consent_events_total{action=\"revoke\"}[1h]))",
+          "legendFormat": "Revocations"
+        }
+      ]
+    },
+    {
+      "title": "Tamper-Evident Consent Ledger Blocks",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "krishinet_consent_ledger_total_blocks",
+          "legendFormat": "Total Blocks"
+        }
+      ]
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["krishinet", "federation", "consent", "privacy"],
+  "time": { "from": "now-24h", "to": "now" },
+  "title": "KrishiNet-BRICS — Data Sovereignty, Consent & Federation",
+  "uid": "federation-consent-sovereignty"
+}

@@ -1,0 +1,62 @@
+# ==============================================================================
+# OpenTelemetry Collector Configuration for Sovereign AgriN Node
+# Ingests traces, metrics, and logs with zero farmer PII or coordinates.
+# ==============================================================================
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'agrin-api'
+          scrape_interval: 15s
+          static_configs:
+            - targets: ['agrin-node-api:8000']
+
+processors:
+  batch:
+    timeout: 1s
+    send_batch_size: 256
+
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 75
+    spike_limit_percentage: 20
+
+  # Data Sovereignty & Privacy Processor:
+  # Drops any accidentally leaked farmer coordinates or phone numbers from trace attributes
+  attributes/privacy_scrub:
+    actions:
+      - key: phone_number
+        action: delete
+      - key: latitude
+        action: delete
+      - key: longitude
+        action: delete
+      - key: http.request.header.authorization
+        action: hash
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    namespace: "krishinet"
+
+  logging:
+    loglevel: warn
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, attributes/privacy_scrub, batch]
+      exporters: [logging]
+    metrics:
+      receivers: [otlp, prometheus]
+      processors: [memory_limiter, batch]
+      exporters: [prometheus]

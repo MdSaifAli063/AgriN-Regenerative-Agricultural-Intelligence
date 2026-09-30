@@ -1,0 +1,23 @@
+rules:
+  - id: hardcoded-jwt-secret-in-production
+    patterns:
+      - pattern: SECRET_KEY = "..."
+      - pattern-not-inside: |
+          if settings.ENVIRONMENT in ["dev", "test"]: ...
+    message: "Hardcoded JWT secret detected. Ensure secrets are loaded exclusively via environment variables."
+    languages: [python]
+    severity: ERROR
+
+  - id: prevent-raw-phone-in-logs
+    pattern: logger.$LEVEL(..., $PHONE, ...)
+    patterns:
+      - pattern-regex: "(phone_number|from_phone|to_phone)"
+    message: "Potential PII phone number logged directly. Use hash_phone_number() or masked format."
+    languages: [python]
+    severity: WARNING
+
+  - id: prevent-unauthenticated-database-drop
+    pattern: $CONN.execute(text("DROP TABLE ..."))
+    message: "Raw DROP TABLE execution detected. Accidental data loss prevention violated."
+    languages: [python]
+    severity: ERROR

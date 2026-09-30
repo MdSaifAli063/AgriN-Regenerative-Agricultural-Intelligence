@@ -1,0 +1,70 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "schema": "https://schema.org/",
+    "agrovoc": "http://aims.fao.org/aos/agrovoc/",
+    "sosa": "http://www.w3.org/ns/sosa/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "krishinet": "https://krishinet.org/vocab#",
+
+    "DiseaseDiagnosis": {
+      "@id": "krishinet:DiseaseDiagnosis",
+      "@type": "@id"
+    },
+    "id": "dcterms:identifier",
+    "node_id": "krishinet:nodeId",
+    "country_iso": {
+      "@id": "krishinet:countryISO",
+      "@type": "xsd:string"
+    },
+    "crop": {
+      "@id": "agrovoc:crop",
+      "@type": "xsd:string"
+    },
+    "crop_agrovoc_uri": {
+      "@id": "sosa:featureOfInterest",
+      "@type": "@id"
+    },
+    "disease": {
+      "@id": "krishinet:diagnosedCondition",
+      "@type": "xsd:string"
+    },
+    "disease_agrovoc_uri": {
+      "@id": "sosa:observedProperty",
+      "@type": "@id"
+    },
+    "confidence": {
+      "@id": "krishinet:diagnosisConfidence",
+      "@type": "xsd:decimal"
+    },
+    "severity": {
+      "@id": "krishinet:diseaseSeverity",
+      "@type": "xsd:string"
+    },
+    "recommended_treatment": {
+      "@id": "krishinet:recommendedTreatment",
+      "@type": "xsd:string"
+    },
+    "is_aggregated": {
+      "@id": "krishinet:isAggregated",
+      "@type": "xsd:boolean"
+    },
+    "sample_count": {
+      "@id": "krishinet:sampleCount",
+      "@type": "xsd:integer"
+    },
+    "region_centroid_lat": {
+      "@id": "krishinet:regionCentroidLat",
+      "@type": "xsd:decimal"
+    },
+    "region_centroid_lon": {
+      "@id": "krishinet:regionCentroidLon",
+      "@type": "xsd:decimal"
+    },
+    "diagnosed_at": {
+      "@id": "sosa:resultTime",
+      "@type": "xsd:dateTime"
+    }
+  }
+}
