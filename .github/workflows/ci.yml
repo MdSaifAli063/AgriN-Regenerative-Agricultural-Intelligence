@@ -162,7 +162,7 @@ jobs:
           " || echo "STAC catalogs verified or none present."
 
       - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         continue-on-error: true
         with:
           file: ./coverage.xml
