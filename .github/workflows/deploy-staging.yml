@@ -22,7 +22,7 @@ jobs:
       url: https://staging.krishinet.brics.agri
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Helm & Kubectl
         uses: azure/setup-helm@v4
