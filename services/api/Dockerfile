@@ -1,6 +1,6 @@
 # Multi-stage Dockerfile for KrishiNet-BRICS Core API
 # Stage 1: Build dependencies
-FROM python:3.12-slim AS builder
+FROM python:3.14-slim AS builder
 
 WORKDIR /build
 
@@ -18,7 +18,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 # Stage 2: Runtime image
-FROM python:3.12-slim AS runner
+FROM python:3.14-slim AS runner
 
 WORKDIR /app
 
